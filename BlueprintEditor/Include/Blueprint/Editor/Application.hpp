@@ -1,34 +1,28 @@
 #ifndef BLUEPRINT_EDITOR_APPLICATION_HPP
 #define BLUEPRINT_EDITOR_APPLICATION_HPP
 
-#include "Blueprint/Editor/SceneManager.hpp"
-#include "Blueprint/Editor/Gui/WindowManager.hpp"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 
 namespace Blueprint::Editor {
-class Application {
+class Application final {
 public:
-    Application();
-    virtual ~Application() = default;
+    explicit Application(const sf::String& title);
 
 public:
     void run();
-
-    [[nodiscard]] virtual SceneManager& getSceneManager() = 0;
-    [[nodiscard]] virtual const SceneManager& getSceneManager() const = 0;
 
     [[nodiscard]] sf::RenderWindow& getRenderWindow();
     [[nodiscard]] const sf::RenderWindow& getRenderWindow() const;
 
 private:
+    bool isRunning();
     void processEvents();
+    void processEvent(const sf::Event& event);
     void update();
     void render();
 
 private:
     sf::RenderWindow m_RenderWindow;
-    Gui::WindowManager m_WindowManager;
 };
 } // Blueprint::Editor
 

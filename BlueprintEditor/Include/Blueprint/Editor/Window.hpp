@@ -1,9 +1,9 @@
-#ifndef BLUEPRINT_EDITOR_GUI_WINDOW_HPP
-#define BLUEPRINT_EDITOR_GUI_WINDOW_HPP
+#ifndef BLUEPRINT_EDITOR_WINDOW_HPP
+#define BLUEPRINT_EDITOR_WINDOW_HPP
 
 #include <string>
 
-namespace Blueprint::Editor::Gui {
+namespace Blueprint::Editor {
 class WindowManager;
 class Window {
 public:
@@ -41,4 +41,4 @@ private:
 };
 } // Blueprint::Editor::Gui
 
-#endif // BLUEPRINT_EDITOR_GUI_WINDOW_HPP
+#endif // BLUEPRINT_EDITOR_WINDOW_HPP
