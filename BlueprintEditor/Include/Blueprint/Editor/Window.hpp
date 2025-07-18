@@ -37,7 +37,7 @@ private:
     WindowManager& m_Manager;
     std::string m_Title;
     bool m_IsOpen;
-    bool m_Flags;
+    int m_Flags;
 };
 } // Blueprint::Editor::Gui
 
