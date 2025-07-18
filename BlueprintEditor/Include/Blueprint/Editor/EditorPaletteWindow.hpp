@@ -14,6 +14,7 @@ public:
 
 private:
     void gui() override;
+    void guiMenuBar();
     void guiEmpty();
     void guiItem(const EditorPalette::Item& item);
 
@@ -21,6 +22,7 @@ private:
     EditorPalette* m_Palette;
     const float m_IconSize;
     const float m_Space;
+    float m_Scale;
 };
 } // Blueprint::Editor
 

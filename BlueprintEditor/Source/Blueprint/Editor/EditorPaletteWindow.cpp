@@ -6,10 +6,11 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 Blueprint::Editor::EditorPaletteWindow::EditorPaletteWindow(WindowManager& manager)
-: Window(manager, "Editor Palette", true)
+: Window(manager, "Editor Palette", true, ImGuiWindowFlags_MenuBar)
 , m_Palette(nullptr)
 , m_IconSize(60.f)
-, m_Space(10.f) {}
+, m_Space(10.f)
+, m_Scale(1.f) {}
 
 void Blueprint::Editor::EditorPaletteWindow::setPalette(EditorPalette* palette) {
     m_Palette = palette;
@@ -19,8 +20,9 @@ void Blueprint::Editor::EditorPaletteWindow::gui() {
     if (m_Palette == nullptr || m_Palette->getItemCount() == 0) {
         return guiEmpty();
     }
+    guiMenuBar();
     const ImVec2 padding = ImGui::GetContentRegionAvail();
-    const int columnsCount = std::max<int>(padding.x / (m_IconSize + m_Space * 2.f), 1);
+    const int columnsCount = std::max<int>(padding.x / (m_IconSize + m_Space * 2.f) / m_Scale, 1);
     if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_Borders)) {
         return;
     }
@@ -32,6 +34,25 @@ void Blueprint::Editor::EditorPaletteWindow::gui() {
         guiItem(m_Palette->getItem(i));
     }
     ImGui::EndTable();
+}
+
+void Blueprint::Editor::EditorPaletteWindow::guiMenuBar() {
+    if (ImGui::BeginMenuBar()) {
+        if (ImGui::BeginMenu("Settings")) {
+            if (ImGui::BeginMenu("Scale")) {
+                if (ImGui::MenuItem("50%", nullptr, m_Scale == 0.5f)) { m_Scale = 0.5f; }
+                if (ImGui::MenuItem("100%", nullptr, m_Scale == 1.f)) { m_Scale = 1.f; }
+                if (ImGui::MenuItem("150%", nullptr, m_Scale == 1.5f)) { m_Scale = 1.5f; }
+                if (ImGui::MenuItem("200%", nullptr, m_Scale == 2.f)) { m_Scale = 2.f; }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::MenuItem("Exit")) {
+            close();
+        }
+        ImGui::EndMenuBar();
+    }
 }
 
 void Blueprint::Editor::EditorPaletteWindow::guiEmpty() {
@@ -47,15 +68,19 @@ void Blueprint::Editor::EditorPaletteWindow::guiItem(const EditorPalette::Item& 
     ImGui::BeginGroup();
     ImGui::PushID(&item);
     ImGuiStyle& style = ImGui::GetStyle();
+    const float originalFontScale = style.FontScaleMain;
     const float originalCellPadding = style.CellPadding.x;
     const float originalFramePadding = style.FramePadding.x;
     style.CellPadding.x = 0.f;
     style.FramePadding.x = 0.f;
+    style.FontScaleMain *= m_Scale;
+    const float scaledSize = m_IconSize * m_Scale;
+    const float scaledSpace = m_Space * m_Scale;
 
     const float columnWidth = ImGui::GetColumnWidth();
-    const float buttonOffset = (columnWidth - m_IconSize) * 0.5f;
+    const float buttonOffset = (columnWidth - scaledSize) * 0.5f;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + buttonOffset);
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + m_Space / 2.f);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
 
     const bool isSelectedItem = m_Palette->getSelectedItem().name == item.name;
     if (isSelectedItem) {
@@ -65,10 +90,10 @@ void Blueprint::Editor::EditorPaletteWindow::guiItem(const EditorPalette::Item& 
     }
     bool isButtonPressed = false;
     if (item.texture == nullptr) {
-        isButtonPressed = ImGui::Button("##Item Button", ImVec2(m_IconSize, m_IconSize));
+        isButtonPressed = ImGui::Button("##Item Button", ImVec2(scaledSize, scaledSize));
     } else {
         const sf::Sprite sprite(*item.texture);
-        isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(m_IconSize, m_IconSize));
+        isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(scaledSize, scaledSize));
     }
     if (isSelectedItem) {
         ImGui::PopStyleVar();
@@ -94,6 +119,7 @@ void Blueprint::Editor::EditorPaletteWindow::guiItem(const EditorPalette::Item& 
 
     style.CellPadding.x = originalCellPadding;
     style.FramePadding.x = originalFramePadding;
+    style.FontScaleMain = originalFontScale;
     ImGui::PopID();
     ImGui::EndGroup();
 }
