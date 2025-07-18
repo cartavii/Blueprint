@@ -9,6 +9,9 @@ Blueprint::Editor::Window::Window(WindowManager& manager, const std::string& tit
 , m_Flags(flags) {}
 
 void Blueprint::Editor::Window::show() {
+    if (!m_IsOpen) {
+        return;
+    }
     if (ImGui::Begin(m_Title.c_str(), &m_IsOpen, m_Flags)) {
         gui();
     }
