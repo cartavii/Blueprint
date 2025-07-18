@@ -31,7 +31,7 @@ public:
     [[nodiscard]] int getFlags() const;
 
 protected:
-    virtual void guiRender() = 0;
+    virtual void gui() = 0;
 
 private:
     WindowManager& m_Manager;

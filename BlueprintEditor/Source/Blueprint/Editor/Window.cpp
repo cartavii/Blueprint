@@ -10,7 +10,7 @@ Blueprint::Editor::Window::Window(WindowManager& manager, const std::string& tit
 
 void Blueprint::Editor::Window::show() {
     if (ImGui::Begin(m_Title.c_str(), &m_IsOpen, m_Flags)) {
-        guiRender();
+        gui();
     }
     ImGui::End();
 }
