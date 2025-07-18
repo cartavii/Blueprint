@@ -1,14 +1,8 @@
 #include "Blueprint/Editor/WindowManager.hpp"
-#include "Blueprint/Editor/Application.hpp"
 
 Blueprint::Editor::WindowManager::WindowManager(Application& application)
 : m_Application(application)
-, m_EditorPaletteWindow(*this)
-, m_EditorPalette({}) {
-    Resources::TextureManager& textureManager = application.getTextureManager();
-    m_EditorPalette = EditorPalette({{textureManager.loadTexture("Icon 1.png"), "Element 12"}, {textureManager.loadTexture("Icon 2.png"), "Element 2"}});
-    m_EditorPaletteWindow.setPalette(&m_EditorPalette);
-}
+, m_EditorPaletteWindow(*this) {}
 
 void Blueprint::Editor::WindowManager::gui() {
     m_EditorPaletteWindow.show();

@@ -22,7 +22,6 @@ public:
 private:
     Application& m_Application;
     EditorPaletteWindow m_EditorPaletteWindow;
-    EditorPalette m_EditorPalette;
 };
 } // Blueprint::Editor
 
