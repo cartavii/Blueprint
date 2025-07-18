@@ -10,7 +10,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 namespace Blueprint::Editor {
-class Application final {
+class Application {
 public:
     explicit Application(const sf::String& title);
 
