@@ -22,6 +22,14 @@ const sf::RenderWindow& Blueprint::Editor::Application::getRenderWindow() const 
     return m_RenderWindow;
 }
 
+Blueprint::Resources::TextureManager& Blueprint::Editor::Application::getTextureManager() {
+    return m_TextureManager;
+}
+
+const Blueprint::Resources::TextureManager& Blueprint::Editor::Application::getTextureManager() const {
+    return m_TextureManager;
+}
+
 Blueprint::Editor::MainMenuBar& Blueprint::Editor::Application::getMainMenuBar() {
     return m_MainMenuBar;
 }

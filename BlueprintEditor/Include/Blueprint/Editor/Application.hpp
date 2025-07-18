@@ -5,6 +5,8 @@
 #include "Blueprint/Editor/MainMenuBar.hpp"
 #include "Blueprint/Editor/WindowManager.hpp"
 
+#include "Blueprint/Resources/TextureManager.hpp"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 
 namespace Blueprint::Editor {
@@ -17,6 +19,9 @@ public:
 
     [[nodiscard]] sf::RenderWindow& getRenderWindow();
     [[nodiscard]] const sf::RenderWindow& getRenderWindow() const;
+
+    [[nodiscard]] Resources::TextureManager& getTextureManager();
+    [[nodiscard]] const Resources::TextureManager& getTextureManager() const;
 
     [[nodiscard]] MainMenuBar& getMainMenuBar();
     [[nodiscard]] const MainMenuBar& getMainMenuBar() const;
@@ -33,6 +38,7 @@ private:
 
 private:
     sf::RenderWindow m_RenderWindow;
+    Resources::TextureManager m_TextureManager;
     GuiApi m_GuiApi;
     MainMenuBar m_MainMenuBar;
     WindowManager m_WindowManager;
