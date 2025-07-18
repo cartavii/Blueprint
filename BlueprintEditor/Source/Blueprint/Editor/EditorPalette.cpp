@@ -25,3 +25,19 @@ std::size_t Blueprint::Editor::EditorPalette::getItemCount() const {
 const Blueprint::Editor::EditorPalette::Item& Blueprint::Editor::EditorPalette::getItem(const std::size_t index) const {
     return m_Items[index];
 }
+
+Blueprint::Editor::EditorPalette::iterator Blueprint::Editor::EditorPalette::begin() {
+    return m_Items.begin();
+}
+
+Blueprint::Editor::EditorPalette::iterator Blueprint::Editor::EditorPalette::end() {
+    return m_Items.end();
+}
+
+Blueprint::Editor::EditorPalette::constIterator Blueprint::Editor::EditorPalette::begin() const {
+    return m_Items.begin();
+}
+
+Blueprint::Editor::EditorPalette::constIterator Blueprint::Editor::EditorPalette::end() const {
+    return m_Items.end();
+}

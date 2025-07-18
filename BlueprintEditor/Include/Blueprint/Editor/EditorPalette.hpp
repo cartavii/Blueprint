@@ -25,6 +25,11 @@ public:
     [[nodiscard]] std::size_t getItemCount() const;
     [[nodiscard]] const Item& getItem(std::size_t index) const;
 
+    [[nodiscard]] iterator begin();
+    [[nodiscard]] iterator end();
+    [[nodiscard]] constIterator begin() const;
+    [[nodiscard]] constIterator end() const;
+
 public:
     static const Item EmptyItem;
 
