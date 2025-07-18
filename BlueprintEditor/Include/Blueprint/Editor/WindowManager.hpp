@@ -16,8 +16,8 @@ public:
     [[nodiscard]] Application& getApplication();
     [[nodiscard]] const Application& getApplication() const;
 
-    EditorPaletteWindow& getEditorPaletteWindow();
-    const EditorPaletteWindow& getEditorPaletteWindow() const;
+    [[nodiscard]] EditorPaletteWindow& getEditorPaletteWindow();
+    [[nodiscard]] const EditorPaletteWindow& getEditorPaletteWindow() const;
 
 private:
     Application& m_Application;
