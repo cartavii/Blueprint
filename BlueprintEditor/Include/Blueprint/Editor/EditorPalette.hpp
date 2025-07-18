@@ -21,9 +21,9 @@ public:
 public:
     void selectItem(Item item);
     void deselectItem();
-    Item getSelectedItem() const;
-    std::size_t getItemCount() const;
-    const Item& getItem(std::size_t index) const;
+    [[nodiscard]] Item getSelectedItem() const;
+    [[nodiscard]] std::size_t getItemCount() const;
+    [[nodiscard]] const Item& getItem(std::size_t index) const;
 
 public:
     static const Item EmptyItem;
