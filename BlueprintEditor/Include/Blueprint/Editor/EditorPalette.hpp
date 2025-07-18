@@ -1,0 +1,37 @@
+#ifndef BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
+#define BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
+
+#include <SFML/Graphics/Texture.hpp>
+#include <vector>
+
+namespace Blueprint::Editor {
+class EditorPalette final {
+public:
+    struct Item {
+        const sf::Texture* texture;
+        const char* name;
+    };
+    using iterator = std::vector<Item>::iterator;
+    using constIterator = std::vector<Item>::const_iterator;
+
+public:
+    EditorPalette(const std::initializer_list<Item>& items);
+    ~EditorPalette() = default;
+
+public:
+    void selectItem(Item item);
+    void deselectItem();
+    Item getSelectedItem() const;
+    std::size_t getItemCount() const;
+    const Item& getItem(std::size_t index) const;
+
+public:
+    static const Item EmptyItem;
+
+private:
+    Item m_SelectedItem;
+    std::vector<Item> m_Items;
+};
+} // Blueprint::Editor
+
+#endif // BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
