@@ -1,9 +1,8 @@
-#include "Game/MyApplication.hpp"
-#include <exception>
+#include "Example/MyApplication.hpp"
 
 int main() {
     try {
-        Game::MyApplication application;
+        Example::MyApplication application;
         application.run();
     } catch (const Blueprint::Core::Exception& exception) {
         exception.log();

@@ -1,11 +1,11 @@
-#ifndef GAME_MY_SCENE_HPP
-#define GAME_MY_SCENE_HPP
+#ifndef GAME_EXAMPLE_MY_SCENE_HPP
+#define GAME_EXAMPLE_MY_SCENE_HPP
 
 #include "Blueprint/Game/Scene.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-namespace Game {
+namespace Example {
 class MyScene final : public Blueprint::Game::Scene {
 public:
     MyScene(Blueprint::Game::SceneManager& manager, const std::filesystem::path& path);
@@ -25,4 +25,4 @@ private:
 };
 } // Game
 
-#endif // GAME_MY_SCENE_HPP
+#endif // GAME_EXAMPLE_MY_SCENE_HPP

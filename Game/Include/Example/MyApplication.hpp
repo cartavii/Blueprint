@@ -1,13 +1,13 @@
-#ifndef GAME_MY_APPLICATION_HPP
-#define GAME_MY_APPLICATION_HPP
+#ifndef GAME_EXAMPLE_MY_APPLICATION_HPP
+#define GAME_EXAMPLE_MY_APPLICATION_HPP
 
 #include "Blueprint/Game/Application.hpp"
 
-namespace Game {
+namespace Example {
 class MyApplication final : public Blueprint::Game::Application {
 public:
     MyApplication();
 };
 }// Game
 
-#endif // GAME_MY_APPLICATION_HPP
+#endif // GAME_EXAMPLE_MY_APPLICATION_HPP

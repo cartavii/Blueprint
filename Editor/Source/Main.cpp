@@ -1,7 +1,4 @@
 #include "Blueprint/Editor/Application.hpp"
-#include "Blueprint/Core/Exception.hpp"
-
-#include <exception>
 
 int main() {
     try {

@@ -1,16 +1,16 @@
-#include "Game/MyScene.hpp"
+#include "Example/MyScene.hpp"
 #include "Blueprint/Game/Application.hpp"
 
-Game::MyScene::MyScene(Blueprint::Game::SceneManager& manager, const std::filesystem::path& path)
+Example::MyScene::MyScene(Blueprint::Game::SceneManager& manager, const std::filesystem::path& path)
 : Scene(manager, path)
 , m_Texture(nullptr)
 , m_RotationSpeed(60.f) {}
 
-Game::MyScene::~MyScene() {
+Example::MyScene::~MyScene() {
     getSceneManager().getApplication().getTextureManager().unloadTexture(m_Texture);
 }
 
-void Game::MyScene::load(const nlohmann::json& data) {
+void Example::MyScene::load(const nlohmann::json& data) {
     const sf::View view = getSceneManager().getApplication().getRenderWindow().getView();
     sf::Vector2f center = view.getSize();
     float size = std::min(center.x, center.y);
@@ -26,12 +26,12 @@ void Game::MyScene::load(const nlohmann::json& data) {
     m_Rectangle.setTexture(m_Texture);
 }
 
-void Game::MyScene::save(nlohmann::json& data) const {}
+void Example::MyScene::save(nlohmann::json& data) const {}
 
-void Game::MyScene::update(const sf::Time& deltaTime) {
+void Example::MyScene::update(const sf::Time& deltaTime) {
     m_Rectangle.rotate(sf::degrees(deltaTime.asSeconds() * m_RotationSpeed));
 }
 
-void Game::MyScene::render(sf::RenderTarget& renderTarget) {
+void Example::MyScene::render(sf::RenderTarget& renderTarget) {
     renderTarget.draw(m_Rectangle);
 }
