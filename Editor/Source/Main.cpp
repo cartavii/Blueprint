@@ -1,8 +1,8 @@
-#include "Blueprint/Editor/Application.hpp"
+#include "Example/Application.hpp"
 
 int main() {
     try {
-        Blueprint::Editor::Application application("Editor");
+        Example::Application application;
         application.run();
     } catch (const Blueprint::Core::Exception& exception) {
         exception.log();
