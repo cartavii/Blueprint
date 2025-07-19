@@ -23,7 +23,7 @@ void Blueprint::Editor::PaletteWindow::gui() {
     guiMenuBar();
     const ImVec2 padding = ImGui::GetContentRegionAvail();
     const int columnsCount = std::max<int>(padding.x / (m_IconSize + m_Space * 2.f) / m_Scale, 1);
-    if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_Borders)) {
+    if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_Borders, ImVec2(columnsCount * (m_IconSize + m_Space * 2.f) * m_Scale, 0.f))) {
         return;
     }
     for (std::size_t i = 0; i < m_Palette->getItemCount(); i++) {
