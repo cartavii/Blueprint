@@ -16,10 +16,10 @@ const Blueprint::Editor::Application& Blueprint::Editor::WindowManager::getAppli
     return m_Application;
 }
 
-Blueprint::Editor::EditorPaletteWindow& Blueprint::Editor::WindowManager::getEditorPaletteWindow() {
+Blueprint::Editor::PaletteWindow& Blueprint::Editor::WindowManager::getEditorPaletteWindow() {
     return m_EditorPaletteWindow;
 }
 
-const Blueprint::Editor::EditorPaletteWindow& Blueprint::Editor::WindowManager::getEditorPaletteWindow() const {
+const Blueprint::Editor::PaletteWindow& Blueprint::Editor::WindowManager::getEditorPaletteWindow() const {
     return m_EditorPaletteWindow;
 }

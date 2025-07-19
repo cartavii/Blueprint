@@ -10,7 +10,7 @@ public:
     ~Application();
 
 private:
-    Blueprint::Editor::EditorPalette m_EditorPalette;
+    Blueprint::Editor::Palette m_EditorPalette;
 };
 } // Example
 

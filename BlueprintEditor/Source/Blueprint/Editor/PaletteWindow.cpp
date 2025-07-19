@@ -1,22 +1,22 @@
-#include "Blueprint/Editor/EditorPaletteWindow.hpp"
+#include "Blueprint/Editor/PaletteWindow.hpp"
 
 #include <algorithm>
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <SFML/Graphics/Sprite.hpp>
 
-Blueprint::Editor::EditorPaletteWindow::EditorPaletteWindow(WindowManager& manager)
+Blueprint::Editor::PaletteWindow::PaletteWindow(WindowManager& manager)
 : Window(manager, "Editor Palette", true, ImGuiWindowFlags_MenuBar)
 , m_Palette(nullptr)
 , m_IconSize(60.f)
 , m_Space(10.f)
 , m_Scale(1.f) {}
 
-void Blueprint::Editor::EditorPaletteWindow::setPalette(EditorPalette* palette) {
+void Blueprint::Editor::PaletteWindow::setPalette(Palette* palette) {
     m_Palette = palette;
 }
 
-void Blueprint::Editor::EditorPaletteWindow::gui() {
+void Blueprint::Editor::PaletteWindow::gui() {
     if (m_Palette == nullptr || m_Palette->getItemCount() == 0) {
         return guiEmpty();
     }
@@ -36,7 +36,7 @@ void Blueprint::Editor::EditorPaletteWindow::gui() {
     ImGui::EndTable();
 }
 
-void Blueprint::Editor::EditorPaletteWindow::guiMenuBar() {
+void Blueprint::Editor::PaletteWindow::guiMenuBar() {
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Settings")) {
             if (ImGui::BeginMenu("Scale")) {
@@ -55,7 +55,7 @@ void Blueprint::Editor::EditorPaletteWindow::guiMenuBar() {
     }
 }
 
-void Blueprint::Editor::EditorPaletteWindow::guiEmpty() {
+void Blueprint::Editor::PaletteWindow::guiEmpty() {
     const char* text = "Palette is empty";
     const ImVec2 textSize = ImGui::CalcTextSize(text);
     const ImVec2 padding = ImGui::GetContentRegionAvail();
@@ -64,7 +64,7 @@ void Blueprint::Editor::EditorPaletteWindow::guiEmpty() {
     ImGui::Text(text);
 }
 
-void Blueprint::Editor::EditorPaletteWindow::guiItem(const EditorPalette::Item& item) {
+void Blueprint::Editor::PaletteWindow::guiItem(const Palette::Item& item) {
     ImGui::BeginGroup();
     ImGui::PushID(&item);
     ImGuiStyle& style = ImGui::GetStyle();

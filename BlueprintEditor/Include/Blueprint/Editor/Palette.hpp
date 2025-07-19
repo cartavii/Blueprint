@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace Blueprint::Editor {
-class EditorPalette final {
+class Palette final {
 public:
     struct Item {
         const sf::Texture* texture;
@@ -15,8 +15,8 @@ public:
     using constIterator = std::vector<Item>::const_iterator;
 
 public:
-    EditorPalette(const std::initializer_list<Item>& items);
-    ~EditorPalette() = default;
+    Palette(const std::initializer_list<Item>& items);
+    ~Palette() = default;
 
 public:
     void selectItem(Item item);
