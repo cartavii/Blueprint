@@ -139,19 +139,22 @@ void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
 }
 
 void Blueprint::Editor::PaletteWindow::guiItemName(const char* name) {
-    const float textWidth = ImGui::CalcTextSize(name).x;
     const float columnWidth = getScaledIconSize() + getScaledSpace() * 2.f;
-    const float textOffset = (columnWidth - textWidth) * 0.5f;
+    float textWidth = ImGui::CalcTextSize(name).x;
+    float textOffset = (columnWidth - textWidth) * 0.5f;
+    const char* appearName = name;
 
+    if (textWidth >= columnWidth) {
+        appearName = "...";
+        textWidth = ImGui::CalcTextSize(name).x;
+        textOffset = (columnWidth - textWidth) * 0.5f;
+    }
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textOffset);
-    if (textWidth <= columnWidth) {
+
+    ImGui::Text(appearName);
+    if (appearName == "..." && ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
         ImGui::Text(name);
-    } else {
-        ImGui::Text("...");
-        if (ImGui::IsItemHovered()) {
-            ImGui::BeginTooltip();
-            ImGui::TextDisabled(name);
-            ImGui::EndTooltip();
-        }
+        ImGui::EndTooltip();
     }
 }
