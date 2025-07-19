@@ -17,6 +17,11 @@ private:
     void guiMenuBar();
     void guiEmpty();
     void guiItem(const Palette::Item& item);
+    void guiItemIcon(const Palette::Item& item);
+    void guiItemName(const char* name);
+
+    [[nodiscard]] constexpr float getScaledIconSize() const;
+    [[nodiscard]] constexpr float getScaledSpace() const;
 
 private:
     Palette* m_Palette;
@@ -25,5 +30,13 @@ private:
     float m_Scale;
 };
 } // Blueprint::Editor
+
+constexpr float Blueprint::Editor::PaletteWindow::getScaledIconSize() const {
+    return m_IconSize * m_Scale;
+}
+
+constexpr float Blueprint::Editor::PaletteWindow::getScaledSpace() const {
+    return m_Space * m_Scale;
+}
 
 #endif // BLUEPRINT_EDITOR_EDITOR_PALETTE_WINDOW_HPP

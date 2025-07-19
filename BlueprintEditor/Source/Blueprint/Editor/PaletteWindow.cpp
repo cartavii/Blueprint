@@ -17,13 +17,14 @@ void Blueprint::Editor::PaletteWindow::setPalette(Palette* palette) {
 }
 
 void Blueprint::Editor::PaletteWindow::gui() {
+    guiMenuBar();
     if (m_Palette == nullptr || m_Palette->getItemCount() == 0) {
         return guiEmpty();
     }
-    guiMenuBar();
     const ImVec2 padding = ImGui::GetContentRegionAvail();
     const int columnsCount = std::max<int>(padding.x / (m_IconSize + m_Space * 2.f) / m_Scale, 1);
-    if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_Borders, ImVec2(columnsCount * (m_IconSize + m_Space * 2.f) * m_Scale, 0.f))) {
+    const ImVec2 size(columnsCount * (m_IconSize + m_Space * 2.f) * m_Scale, 0.f);
+    if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_None, size)) {
         return;
     }
     for (std::size_t i = 0; i < m_Palette->getItemCount(); i++) {
@@ -58,68 +59,99 @@ void Blueprint::Editor::PaletteWindow::guiMenuBar() {
 void Blueprint::Editor::PaletteWindow::guiEmpty() {
     const char* text = "Palette is empty";
     const ImVec2 textSize = ImGui::CalcTextSize(text);
-    const ImVec2 padding = ImGui::GetContentRegionAvail();
-    const ImVec2 position = {(padding.x - textSize.x) * 0.5f, (padding.y - textSize.y) * 0.5f};
+    const ImVec2 padding = ImGui::GetContentRegionMax();
+    const ImVec2 position = {(padding.x - textSize.x) * 0.5f, (padding.y - textSize.y) * 0.5f + 18.f};
     ImGui::SetCursorPos(position);
     ImGui::Text(text);
 }
 
+class PaletteTableStyle {
+public:
+    PaletteTableStyle(ImGuiStyle& style, const float scale)
+    : m_Style(style)
+    , m_Scale(scale)
+    , m_OriginalFontScale(style.FontScaleMain)
+    , m_OriginalCellPadding(style.CellPadding.x)
+    , m_OriginalFramePadding(style.FramePadding.x) {
+        m_Style.FontScaleMain *= m_Scale;
+        m_Style.CellPadding.x = 0.f;
+        m_Style.FramePadding.x = 0.f;
+    }
+
+    ~PaletteTableStyle() {
+        m_Style.FontScaleMain *= m_OriginalFontScale;
+        m_Style.CellPadding.x = m_OriginalCellPadding;
+        m_Style.FramePadding.x = m_OriginalFramePadding;
+    }
+
+private:
+    ImGuiStyle& m_Style;
+    const float m_Scale;
+    const float m_OriginalFontScale;
+    const float m_OriginalCellPadding;
+    const float m_OriginalFramePadding;
+};
+
 void Blueprint::Editor::PaletteWindow::guiItem(const Palette::Item& item) {
+    PaletteTableStyle style(ImGui::GetStyle(), m_Scale);
     ImGui::BeginGroup();
     ImGui::PushID(&item);
-    ImGuiStyle& style = ImGui::GetStyle();
-    const float originalFontScale = style.FontScaleMain;
-    const float originalCellPadding = style.CellPadding.x;
-    const float originalFramePadding = style.FramePadding.x;
-    style.CellPadding.x = 0.f;
-    style.FramePadding.x = 0.f;
-    style.FontScaleMain *= m_Scale;
-    const float scaledSize = m_IconSize * m_Scale;
-    const float scaledSpace = m_Space * m_Scale;
+    guiItemIcon(item);
+    guiItemName(item.name);
+    ImGui::PopID();
+    ImGui::EndGroup();
+}
 
-    const float columnWidth = ImGui::GetColumnWidth();
-    const float buttonOffset = (columnWidth - scaledSize) * 0.5f;
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + buttonOffset);
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
-
-    const bool isSelectedItem = m_Palette->getSelectedItem().name == item.name;
-    if (isSelectedItem) {
+class IconStyle {
+public:
+    IconStyle() {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 0.40f));
         ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
         ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
     }
-    bool isButtonPressed = false;
-    if (item.texture == nullptr) {
-        isButtonPressed = ImGui::Button("##Item Button", ImVec2(scaledSize, scaledSize));
-    } else {
-        const sf::Sprite sprite(*item.texture);
-        isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(scaledSize, scaledSize));
-    }
-    if (isSelectedItem) {
+
+    ~IconStyle() {
         ImGui::PopStyleVar();
         ImGui::PopStyleColor(2);
+    }
+};
+
+void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
+    const float scaledIconSize = getScaledIconSize();
+    const float scaledSpace = getScaledSpace();
+    std::optional<IconStyle> style = std::nullopt;
+
+    if (m_Palette->getSelectedItem().name == item.name) {
+        style.emplace();
+    }
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + scaledSpace);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
+    bool isButtonPressed = false;
+    if (item.texture == nullptr) {
+        isButtonPressed = ImGui::Button("##Item Button", ImVec2(scaledIconSize, scaledIconSize));
+    } else {
+        const sf::Sprite sprite(*item.texture);
+        isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(scaledIconSize, scaledIconSize));
     }
     if (isButtonPressed) {
         m_Palette->selectItem(item);
     }
+}
 
-    const float textWidth = ImGui::CalcTextSize(item.name).x;
+void Blueprint::Editor::PaletteWindow::guiItemName(const char* name) {
+    const float textWidth = ImGui::CalcTextSize(name).x;
+    const float columnWidth = getScaledIconSize() + getScaledSpace() * 2.f;
     const float textOffset = (columnWidth - textWidth) * 0.5f;
+
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textOffset);
     if (textWidth <= columnWidth) {
-        ImGui::Text(item.name);
+        ImGui::Text(name);
     } else {
         ImGui::Text("...");
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
-            ImGui::TextDisabled(item.name);
+            ImGui::TextDisabled(name);
             ImGui::EndTooltip();
         }
     }
-
-    style.CellPadding.x = originalCellPadding;
-    style.FramePadding.x = originalFramePadding;
-    style.FontScaleMain = originalFontScale;
-    ImGui::PopID();
-    ImGui::EndGroup();
 }
