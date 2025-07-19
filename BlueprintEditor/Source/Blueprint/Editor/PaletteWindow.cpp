@@ -79,7 +79,7 @@ public:
     }
 
     ~PaletteTableStyle() {
-        m_Style.FontScaleMain *= m_OriginalFontScale;
+        m_Style.FontScaleMain = m_OriginalFontScale;
         m_Style.CellPadding.x = m_OriginalCellPadding;
         m_Style.FramePadding.x = m_OriginalFramePadding;
     }
@@ -104,10 +104,10 @@ void Blueprint::Editor::PaletteWindow::guiItem(const Palette::Item& item) {
 
 class IconStyle {
 public:
-    IconStyle() {
+    explicit IconStyle(const float scale) {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 0.40f));
         ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0f * scale);
     }
 
     ~IconStyle() {
@@ -122,7 +122,7 @@ void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
     std::optional<IconStyle> style = std::nullopt;
 
     if (m_Palette->getSelectedItem().name == item.name) {
-        style.emplace();
+        style.emplace(m_Scale);
     }
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + scaledSpace);
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
