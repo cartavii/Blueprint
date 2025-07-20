@@ -19,6 +19,7 @@ private:
     void guiItem(const Palette::Item& item);
     void guiItemIcon(const Palette::Item& item);
     void guiItemName(const char* name);
+    void processDeselection();
 
     [[nodiscard]] constexpr float getScaledIconSize() const;
     [[nodiscard]] constexpr float getScaledSpace() const;

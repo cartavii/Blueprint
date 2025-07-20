@@ -34,6 +34,7 @@ void Blueprint::Editor::PaletteWindow::gui() {
         ImGui::TableNextColumn();
         guiItem(m_Palette->getItem(i));
     }
+    processDeselection();
     ImGui::EndTable();
 }
 
@@ -157,5 +158,11 @@ void Blueprint::Editor::PaletteWindow::guiItemName(const char* name) {
         ImGui::BeginTooltip();
         ImGui::Text(name);
         ImGui::EndTooltip();
+    }
+}
+
+void Blueprint::Editor::PaletteWindow::processDeselection() {
+    if (ImGui::IsMouseClicked(0) && !ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered()) {
+        m_Palette->deselectItem();
     }
 }
