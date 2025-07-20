@@ -2,6 +2,7 @@
 #define GAME_EXAMPLE_MY_SCENE_HPP
 
 #include "Blueprint/Game/Scene.hpp"
+#include "Blueprint/Resources/TextureManager.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -9,7 +10,7 @@ namespace Example {
 class MyScene final : public Blueprint::Game::Scene {
 public:
     MyScene(Blueprint::Game::SceneManager& manager, const std::filesystem::path& path);
-    ~MyScene() override;
+    ~MyScene() override = default;
 
 public:
     void load(const nlohmann::json& data) override;
@@ -20,7 +21,7 @@ public:
 
 private:
     sf::RectangleShape m_Rectangle;
-    const sf::Texture* m_Texture;
+    Blueprint::Resources::TextureResource m_TextureResource;
     float m_RotationSpeed;
 };
 } // Game

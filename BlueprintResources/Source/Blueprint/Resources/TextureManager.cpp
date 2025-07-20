@@ -8,40 +8,89 @@ Blueprint::Resources::FailedToLoadTextureException::FailedToLoadTextureException
 Blueprint::Resources::TextureNotFoundException::TextureNotFoundException()
 : Exception("Failed to find texture by reference") {}
 
+Blueprint::Resources::TextureResource::TextureResource()
+: m_Manager(nullptr)
+, m_Texture(nullptr) {}
+
+Blueprint::Resources::TextureResource::TextureResource(TextureManager* manager, std::filesystem::path path, const sf::Texture* texture)
+: m_Manager(manager)
+, m_Path(std::move(path))
+, m_Texture(texture) {
+    increase();
+}
+
+Blueprint::Resources::TextureResource::TextureResource(const TextureResource& other)
+: m_Manager(other.m_Manager)
+, m_Path(other.m_Path)
+, m_Texture(other.m_Texture) {
+    increase();
+}
+
+Blueprint::Resources::TextureResource::~TextureResource() {
+    decrease();
+}
+
+const sf::Texture* Blueprint::Resources::TextureResource::getTexture() const {
+    return m_Texture;
+}
+
+Blueprint::Resources::TextureResource& Blueprint::Resources::TextureResource::operator=(const TextureResource& other) {
+    if (*this == other) {
+        return *this;
+    }
+    decrease();
+    m_Manager = other.m_Manager;
+    m_Path = other.m_Path;
+    m_Texture = other.m_Texture;
+    increase();
+    return *this;
+}
+
+bool Blueprint::Resources::TextureResource::operator==(const TextureResource& other) const {
+    return this == &other
+        && m_Manager == other.m_Manager
+        && m_Path == other.m_Path
+        && m_Texture == other.m_Texture;
+}
+
+void Blueprint::Resources::TextureResource::increase() {
+    if (m_Manager == nullptr || m_Texture == nullptr) {
+        return;
+    }
+    ++m_Manager->m_Textures.at(m_Path).count;
+}
+
+void Blueprint::Resources::TextureResource::decrease() {
+    if (m_Manager == nullptr || m_Texture == nullptr) {
+        return;
+    }
+    if (--m_Manager->m_Textures.at(m_Path).count == 0) {
+        delete m_Texture;
+        m_Manager->m_Textures.erase(m_Path);
+    }
+}
+
 Blueprint::Resources::TextureManager::TextureManager() : ResourceManager("Textures") {}
 
 Blueprint::Resources::TextureManager::~TextureManager() {
-    for (auto [path, textureHolder] : m_Textures) {
+    for (const auto& [path, textureHolder] : m_Textures) {
         delete textureHolder.texture;
     }
 }
 
-const sf::Texture* Blueprint::Resources::TextureManager::loadTexture(const std::filesystem::path& path) {
-    if (!isPathValid(path)) {
-        throw FailedToOpenFileException(path.string());
+Blueprint::Resources::TextureResource Blueprint::Resources::TextureManager::getTextureResource(const std::filesystem::path& texturePath) {
+    if (!isPathValid(texturePath)) {
+        throw TextureNotFoundException();
     }
-    if (const auto it = m_Textures.find(path); it != m_Textures.end()) {
-        return it->second.texture;
+    const std::filesystem::path fullPath = getFullPath(texturePath);
+    if (const auto it = m_Textures.find(fullPath); it != m_Textures.end()) {
+        return TextureResource(this, fullPath, it->second.texture);
     }
-    auto* texture = new sf::Texture;
-    if (const std::filesystem::path fullPath = getFullPath(path); !texture->loadFromFile(fullPath)) {
+    sf::Texture* texture = new sf::Texture;
+    if (!texture->loadFromFile(fullPath)) {
         delete texture;
-        throw FailedToOpenFileException(fullPath.string());
+        throw TextureNotFoundException();
     }
-    constexpr std::uint16_t textureCount = 1;
-    m_Textures[path] = TextureHolder{texture, textureCount};
-    return texture;
-}
-
-void Blueprint::Resources::TextureManager::unloadTexture(const sf::Texture* texture) {
-    for (auto it = m_Textures.begin(); it != m_Textures.end(); ++it) {
-        if (it->second.texture == texture) {
-            if (--it->second.count == 0) {
-                delete texture;
-                m_Textures.erase(it);
-            }
-            return;
-        }
-    }
-    throw TextureNotFoundException();
+    m_Textures[fullPath] = {texture, 0};
+    return TextureResource(this, fullPath, texture);
 }

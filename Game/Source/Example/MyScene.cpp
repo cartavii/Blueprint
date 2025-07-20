@@ -3,12 +3,7 @@
 
 Example::MyScene::MyScene(Blueprint::Game::SceneManager& manager, const std::filesystem::path& path)
 : Scene(manager, path)
-, m_Texture(nullptr)
 , m_RotationSpeed(60.f) {}
-
-Example::MyScene::~MyScene() {
-    getSceneManager().getApplication().getTextureManager().unloadTexture(m_Texture);
-}
 
 void Example::MyScene::load(const nlohmann::json& data) {
     const sf::View view = getSceneManager().getApplication().getRenderWindow().getView();
@@ -21,9 +16,9 @@ void Example::MyScene::load(const nlohmann::json& data) {
     m_Rectangle.setSize(sf::Vector2f(size, size));
     if (const std::string textureNameField = "ImagePath"; data.contains(textureNameField)) {
         const std::string texturePath = data[textureNameField].get<std::string>();
-        m_Texture = getSceneManager().getApplication().getTextureManager().loadTexture(texturePath);
+        m_TextureResource = getSceneManager().getApplication().getTextureManager().getTextureResource(texturePath);
     }
-    m_Rectangle.setTexture(m_Texture);
+    m_Rectangle.setTexture(m_TextureResource.getTexture());
 }
 
 void Example::MyScene::save(nlohmann::json& data) const {}

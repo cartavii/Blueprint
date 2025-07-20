@@ -18,14 +18,39 @@ public:
     TextureNotFoundException();
 };
 
+class TextureManager;
+
+class TextureResource {
+public:
+    TextureResource();
+    TextureResource(TextureManager* manager, std::filesystem::path path, const sf::Texture* texture);
+    TextureResource(const TextureResource& other);
+    ~TextureResource();
+
+public:
+    [[nodiscard]] const sf::Texture* getTexture() const;
+
+public:
+    TextureResource& operator=(const TextureResource& other);
+    [[nodiscard]] bool operator==(const TextureResource& other) const;
+
+private:
+    void increase();
+    void decrease();
+
+private:
+    TextureManager* m_Manager;
+    std::filesystem::path m_Path;
+    const sf::Texture* m_Texture;
+};
+
 class TextureManager : private ResourceManager {
 public:
     TextureManager();
     ~TextureManager();
 
 public:
-    const sf::Texture* loadTexture(const std::filesystem::path& path);
-    void unloadTexture(const sf::Texture* texture);
+    TextureResource getTextureResource(const std::filesystem::path& texturePath);
 
 private:
     struct TextureHolder {
@@ -35,6 +60,7 @@ private:
 
 private:
     std::unordered_map<std::filesystem::path, TextureHolder> m_Textures;
+    friend TextureResource;
 };
 } // Blueprint::Resources
 

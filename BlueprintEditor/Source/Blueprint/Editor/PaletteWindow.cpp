@@ -119,22 +119,23 @@ public:
 void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
     const float scaledIconSize = getScaledIconSize();
     const float scaledSpace = getScaledSpace();
+    const sf::Texture* itemTexture = item.textureResource.getTexture();
     std::optional<IconStyle> style = std::nullopt;
 
-    if (m_Palette->getSelectedItem().name == item.name) {
+    if (m_Palette->getSelectedItem() == &item) {
         style.emplace(m_Scale);
     }
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + scaledSpace);
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
     bool isButtonPressed = false;
-    if (item.texture == nullptr) {
+    if (itemTexture == nullptr) {
         isButtonPressed = ImGui::Button("##Item Button", ImVec2(scaledIconSize, scaledIconSize));
     } else {
-        const sf::Sprite sprite(*item.texture);
+        const sf::Sprite sprite(*itemTexture);
         isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(scaledIconSize, scaledIconSize));
     }
     if (isButtonPressed) {
-        m_Palette->selectItem(item);
+        m_Palette->selectItem(&item);
     }
 }
 
