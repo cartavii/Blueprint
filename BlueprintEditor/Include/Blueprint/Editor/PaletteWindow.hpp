@@ -1,5 +1,5 @@
-#ifndef BLUEPRINT_EDITOR_EDITOR_PALETTE_WINDOW_HPP
-#define BLUEPRINT_EDITOR_EDITOR_PALETTE_WINDOW_HPP
+#ifndef BLUEPRINT_EDITOR_PALETTE_WINDOW_HPP
+#define BLUEPRINT_EDITOR_PALETTE_WINDOW_HPP
 
 #include "Blueprint/Editor/Palette.hpp"
 #include "Blueprint/Editor/Window.hpp"
@@ -40,4 +40,4 @@ constexpr float Blueprint::Editor::PaletteWindow::getScaledSpace() const {
     return m_Space * m_Scale;
 }
 
-#endif // BLUEPRINT_EDITOR_EDITOR_PALETTE_WINDOW_HPP
+#endif // BLUEPRINT_EDITOR_PALETTE_WINDOW_HPP

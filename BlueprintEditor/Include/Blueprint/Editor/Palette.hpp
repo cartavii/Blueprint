@@ -1,5 +1,5 @@
-#ifndef BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
-#define BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
+#ifndef BLUEPRINT_EDITOR_PALETTE_HPP
+#define BLUEPRINT_EDITOR_PALETTE_HPP
 
 #include "Blueprint/Resources/TextureManager.hpp"
 
@@ -39,4 +39,4 @@ private:
 };
 } // Blueprint::Editor
 
-#endif // BLUEPRINT_EDITOR_EDITOR_PALETTE_HPP
+#endif // BLUEPRINT_EDITOR_PALETTE_HPP
