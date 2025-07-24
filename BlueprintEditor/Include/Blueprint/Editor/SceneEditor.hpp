@@ -25,8 +25,8 @@ public:
 
     [[nodiscard]] virtual Palette* getPalette();
 
-    Resources::TextureManager& getTextureManager();
-    const Resources::TextureManager& getTextureManager() const;
+    [[nodiscard]] Resources::TextureManager& getTextureManager();
+    [[nodiscard]] const Resources::TextureManager& getTextureManager() const;
 
 private:
     Resources::TextureManager* m_TextureManager;
