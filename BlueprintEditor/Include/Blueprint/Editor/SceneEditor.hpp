@@ -6,9 +6,10 @@
 #include <nlohmann/json.hpp>
 
 namespace Blueprint::Editor {
+class SceneFabric;
 class SceneEditor {
 public:
-    explicit SceneEditor(Resources::TextureManager& textureManager);
+    explicit SceneEditor();
     virtual ~SceneEditor() = default;
 
 public:
@@ -28,7 +29,9 @@ public:
     const Resources::TextureManager& getTextureManager() const;
 
 private:
-    Resources::TextureManager& m_TextureManager;
+    Resources::TextureManager* m_TextureManager;
+
+    friend SceneFabric;
 };
 } // Blueprint::Editor
 
