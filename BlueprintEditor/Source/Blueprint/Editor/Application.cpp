@@ -3,6 +3,7 @@
 Blueprint::Editor::Application::Application(const sf::String& title)
 : m_RenderWindow(sf::VideoMode::getDesktopMode(), title)
 , m_SceneFabric(*this)
+, m_SceneManager(*this)
 , m_GuiApi(m_RenderWindow)
 , m_MainMenuBar(*this)
 , m_WindowManager(*this) {}
@@ -37,6 +38,14 @@ Blueprint::Editor::SceneFabric& Blueprint::Editor::Application::getSceneFabric()
 
 const Blueprint::Editor::SceneFabric& Blueprint::Editor::Application::getSceneFabric() const {
     return m_SceneFabric;
+}
+
+Blueprint::Editor::SceneManager& Blueprint::Editor::Application::getSceneManager() {
+    return m_SceneManager;
+}
+
+const Blueprint::Editor::SceneManager& Blueprint::Editor::Application::getSceneManager() const {
+    return m_SceneManager;
 }
 
 Blueprint::Editor::MainMenuBar& Blueprint::Editor::Application::getMainMenuBar() {
