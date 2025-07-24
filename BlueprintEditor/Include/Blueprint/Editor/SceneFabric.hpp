@@ -1,15 +1,21 @@
 #ifndef BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 #define BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 
+#include "Blueprint/Core/Exception.hpp"
 #include "Blueprint/Editor/Palette.hpp"
 
-#include <filesystem>
 #include <string>
 #include <unordered_map>
 
 namespace Blueprint::Editor {
 class Application;
 class SceneEditor;
+
+class SceneTypeNotRegistered final : public Core::Exception {
+public:
+    explicit SceneTypeNotRegistered(const std::string& sceneType);
+};
+
 class SceneFabric {
 public:
     explicit SceneFabric(Application& application);

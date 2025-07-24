@@ -1,6 +1,9 @@
 #include "Blueprint/Editor/SceneFabric.hpp"
 #include "Blueprint/Editor/Application.hpp"
 
+Blueprint::Editor::SceneTypeNotRegistered::SceneTypeNotRegistered(const std::string& sceneType)
+: Exception("Scene type '" + sceneType + "' is not registered") {}
+
 Blueprint::Editor::SceneFabric::SceneFabric(Application& application)
 : m_Application(application)
 , m_TextureManager(application.getTextureManager()){}
@@ -8,7 +11,7 @@ Blueprint::Editor::SceneFabric::SceneFabric(Application& application)
 Blueprint::Editor::SceneEditor* Blueprint::Editor::SceneFabric::createSceneEditor(const std::string& keyName) {
     const auto it = m_Creates.find(keyName);
     if (it == m_Creates.end()) {
-        return nullptr;
+        throw SceneTypeNotRegistered(keyName);
     }
     return it->second();
 }
