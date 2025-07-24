@@ -1,8 +1,11 @@
 #ifndef BLUEPRINT_EDITOR_APPLICATION_HPP
 #define BLUEPRINT_EDITOR_APPLICATION_HPP
 
+#include <SFML/Graphics/Font.hpp>
+
 #include "Blueprint/Editor/GuiApi.hpp"
 #include "Blueprint/Editor/MainMenuBar.hpp"
+#include "Blueprint/Editor/SceneFabric.hpp"
 #include "Blueprint/Editor/WindowManager.hpp"
 
 #include "Blueprint/Resources/TextureManager.hpp"
@@ -23,6 +26,9 @@ public:
     [[nodiscard]] Resources::TextureManager& getTextureManager();
     [[nodiscard]] const Resources::TextureManager& getTextureManager() const;
 
+    [[nodiscard]] SceneFabric& getSceneFabric();
+    [[nodiscard]] const SceneFabric& getSceneFabric() const;
+
     [[nodiscard]] MainMenuBar& getMainMenuBar();
     [[nodiscard]] const MainMenuBar& getMainMenuBar() const;
 
@@ -39,6 +45,7 @@ private:
 private:
     sf::RenderWindow m_RenderWindow;
     Resources::TextureManager m_TextureManager;
+    SceneFabric m_SceneFabric;
     GuiApi m_GuiApi;
     MainMenuBar m_MainMenuBar;
     WindowManager m_WindowManager;
