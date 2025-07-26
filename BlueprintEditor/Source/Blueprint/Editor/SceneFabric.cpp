@@ -13,7 +13,7 @@ Blueprint::Editor::SceneEditor* Blueprint::Editor::SceneFabric::createSceneEdito
     if (it == m_Creates.end()) {
         throw SceneTypeNotRegistered(keyName);
     }
-    return it->second();
+    return it->second(m_TextureManager);
 }
 
 Blueprint::Editor::Application& Blueprint::Editor::SceneFabric::getApplication() {

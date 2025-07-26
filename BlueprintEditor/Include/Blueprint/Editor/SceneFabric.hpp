@@ -1,15 +1,17 @@
 #ifndef BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 #define BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 
+#include <iostream>
+
 #include "Blueprint/Core/Exception.hpp"
 #include "Blueprint/Editor/Palette.hpp"
+#include "Blueprint/Editor/SceneEditor.hpp"
 
 #include <string>
 #include <unordered_map>
 
 namespace Blueprint::Editor {
 class Application;
-class SceneEditor;
 
 class SceneTypeNotRegistered final : public Core::Exception {
 public:
@@ -30,17 +32,17 @@ public:
 
 private:
     Application& m_Application;
-    Resources::TextureManager m_TextureManager;
-    std::unordered_map<std::string, SceneEditor*(*)()> m_Creates;
+    Resources::TextureManager& m_TextureManager;
+    std::unordered_map<std::string, SceneEditor*(*)(Resources::TextureManager&)> m_Creates;
 };
 } // Blueprint::Editor
 
 
 template<class TSceneEditor>
 void Blueprint::Editor::SceneFabric::registerSceneEditor(const std::string& keyName) {
-    m_Creates[keyName] = [&]() -> SceneEditor* {
-        SceneEditor* sceneEditor = new TSceneEditor(m_TextureManager);
-        sceneEditor->m_TextureManager = &m_TextureManager;
+    m_Creates[keyName] = [](Resources::TextureManager& textureManager) -> SceneEditor* {
+        SceneEditor* sceneEditor = new TSceneEditor;
+        sceneEditor->m_TextureManager = &textureManager;
         return sceneEditor;
     };
 }
