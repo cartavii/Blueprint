@@ -4,6 +4,7 @@
 #include "Blueprint/Editor/Palette.hpp"
 
 #include <nlohmann/json.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace Blueprint::Editor {
 class SceneFabric;
@@ -14,7 +15,7 @@ public:
 
 public:
     virtual void update() {}
-    virtual void render() {}
+    virtual void render(sf::RenderTarget& renderTarget) {}
 
     virtual void save(const nlohmann::json& data) {}
     virtual void load(nlohmann::json& data) {}
