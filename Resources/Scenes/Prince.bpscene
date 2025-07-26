@@ -1,4 +1,4 @@
 {
-    "Type" : "Game::MyScene",
+    "Type" : "Example::MyScene",
     "ImagePath" : "Silly Ralsei.png"
 }
