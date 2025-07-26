@@ -14,14 +14,15 @@ public:
     virtual ~SceneEditor() = default;
 
 public:
-    virtual void update() {}
-    virtual void render(sf::RenderTarget& renderTarget) {}
-
     virtual void save(const nlohmann::json& data) {}
     virtual void load(nlohmann::json& data) {}
 
+    virtual void update() {}
+    virtual void render(sf::RenderTarget& renderTarget) {}
+
     virtual void onFocusGain() {}
     virtual void onFocusLoss() {}
+    
     virtual void onItemSelect(const Palette::Item* item) {}
 
     [[nodiscard]] virtual Palette* getPalette();
