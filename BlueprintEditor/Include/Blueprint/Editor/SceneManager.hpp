@@ -61,6 +61,7 @@ public:
 
 private:
     nlohmann::json loadSceneData(const std::filesystem::path& path);
+    void saveSceneData(const std::filesystem::path& path, const nlohmann::json& sceneData);
 
 private:
     Application& m_Application;
