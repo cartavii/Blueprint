@@ -2,10 +2,12 @@
 
 Blueprint::Editor::WindowManager::WindowManager(Application& application)
 : m_Application(application)
-, m_EditorPaletteWindow(*this) {}
+, m_EditorPaletteWindow(*this)
+, m_SceneEditorWindow(*this) {}
 
 void Blueprint::Editor::WindowManager::gui() {
     m_EditorPaletteWindow.show();
+    m_SceneEditorWindow.show();
 }
 
 Blueprint::Editor::Application& Blueprint::Editor::WindowManager::getApplication() {

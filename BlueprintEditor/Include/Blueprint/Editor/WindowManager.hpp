@@ -2,6 +2,7 @@
 #define BLUEPRINT_EDITOR_WINDOW_MANAGER_HPP
 
 #include "Blueprint/Editor/PaletteWindow.hpp"
+#include "Blueprint/Editor/SceneEditorWindow.hpp"
 
 namespace Blueprint::Editor {
 class Application;
@@ -19,9 +20,13 @@ public:
     [[nodiscard]] PaletteWindow& getEditorPaletteWindow();
     [[nodiscard]] const PaletteWindow& getEditorPaletteWindow() const;
 
+    [[nodiscard]] SceneEditorWindow& getSceneEditorWindow();
+    [[nodiscard]] const SceneEditorWindow& getSceneEditorWindow() const;
+
 private:
     Application& m_Application;
     PaletteWindow m_EditorPaletteWindow;
+    SceneEditorWindow m_SceneEditorWindow;
 };
 } // Blueprint::Editor
 
