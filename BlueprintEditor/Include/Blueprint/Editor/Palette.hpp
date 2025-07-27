@@ -16,6 +16,7 @@ public:
     using constIterator = std::vector<Item>::const_iterator;
 
 public:
+    Palette();
     Palette(const std::initializer_list<Item>& items);
     ~Palette() = default;
 

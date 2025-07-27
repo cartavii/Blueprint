@@ -1,5 +1,7 @@
 #include "Blueprint/Editor/Palette.hpp"
 
+Blueprint::Editor::Palette::Palette() : m_SelectedItem(nullptr) {}
+
 Blueprint::Editor::Palette::Palette(const std::initializer_list<Item>& items)
 : m_SelectedItem(nullptr)
 , m_Items(items) {}
