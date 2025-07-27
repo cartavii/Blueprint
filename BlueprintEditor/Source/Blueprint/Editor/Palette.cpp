@@ -6,6 +6,10 @@ Blueprint::Editor::Palette::Palette(const std::initializer_list<Item>& items)
 : m_SelectedItem(nullptr)
 , m_Items(items) {}
 
+void Blueprint::Editor::Palette::addItem(const Item& item) {
+    m_Items.push_back(item);
+}
+
 void Blueprint::Editor::Palette::selectItem(const Item* item) {
     m_SelectedItem = item;
 }

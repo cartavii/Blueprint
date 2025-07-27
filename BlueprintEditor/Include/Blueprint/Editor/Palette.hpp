@@ -21,6 +21,8 @@ public:
     ~Palette() = default;
 
 public:
+    void addItem(const Item& item);
+
     void selectItem(const Item* item);
     void deselectItem();
 
