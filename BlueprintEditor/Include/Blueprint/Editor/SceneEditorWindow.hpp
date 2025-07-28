@@ -10,8 +10,10 @@
 #include <filesystem>
 
 namespace Blueprint::Editor {
+class PaletteWindow;
 class SceneManager;
 class SceneEditor;
+
 class SceneEditorWindow final : public Window, private Resources::ResourceManager {
 public:
     explicit SceneEditorWindow(WindowManager& manager);
@@ -28,6 +30,7 @@ private:
 private:
     bool m_Reload;
     SceneManager& m_SceneManager;
+    PaletteWindow& m_PaletteWindow;
     SceneEditor* m_SelectedSceneEditor;
     filewatch::FileWatch<std::string> m_Watch;
     sf::RenderTexture m_RenderTexture;

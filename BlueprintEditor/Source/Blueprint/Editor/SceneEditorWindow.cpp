@@ -1,5 +1,6 @@
 #include "Blueprint/Editor/SceneEditorWindow.hpp"
 #include "Blueprint/Editor/Application.hpp"
+#include "Blueprint/Editor/PaletteWindow.hpp"
 #include "Blueprint/Editor/SceneEditor.hpp"
 #include "Blueprint/Editor/SceneManager.hpp"
 #include "Blueprint/Editor/WindowManager.hpp"
@@ -12,6 +13,7 @@ Blueprint::Editor::SceneEditorWindow::SceneEditorWindow(WindowManager& manager)
 : Window(manager, "Scene Editor", true, ImGuiWindowFlags_MenuBar)
 , ResourceManager("Scenes")
 , m_Reload(false)
+, m_PaletteWindow(manager.getEditorPaletteWindow())
 , m_SceneManager(manager.getApplication().getSceneManager())
 , m_SelectedSceneEditor(nullptr)
 , m_Watch(getRootPath().string(), [this](const std::string& path, const filewatch::Event event){update(path, event);}) {}
@@ -39,6 +41,7 @@ void Blueprint::Editor::SceneEditorWindow::gui() {
                 }
                 sceneEditor->onFocusGain();
                 m_SelectedSceneEditor = sceneEditor;
+                m_PaletteWindow.setPalette(m_SelectedSceneEditor->getPalette());
             }
             ImVec2 space = ImGui::GetContentRegionAvail();
             if (space.x < 1.f) { space.x = 1.f; }
