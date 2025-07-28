@@ -8,6 +8,8 @@
 
 namespace Blueprint::Editor {
 class SceneFabric;
+class SceneEditorWindow;
+
 class SceneEditor {
 public:
     explicit SceneEditor();
@@ -30,10 +32,15 @@ public:
     [[nodiscard]] Resources::TextureManager& getTextureManager();
     [[nodiscard]] const Resources::TextureManager& getTextureManager() const;
 
+    [[nodiscard]] const sf::Vector2f& getMouseNormalPosition() const;
+    [[nodiscard]] sf::Vector2f getMouseViewPosition(const sf::View& view) const;
+
 private:
     Resources::TextureManager* m_TextureManager;
+    sf::Vector2f m_MouseNormalPosition;
 
     friend SceneFabric;
+    friend SceneEditorWindow;
 };
 } // Blueprint::Editor
 
