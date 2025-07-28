@@ -7,10 +7,6 @@ namespace Example {
 class Application : public Blueprint::Editor::Application {
 public:
     Application();
-    ~Application();
-
-private:
-    Blueprint::Editor::Palette m_EditorPalette;
 };
 } // Example
 
