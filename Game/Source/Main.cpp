@@ -1,9 +1,9 @@
-#include "Example/Application.hpp"
+#include "Blueprint/Core/Exception.hpp"
 
 int main() {
     try {
-        Example::Application application;
-        application.run();
+        // Example::Application application;
+        // application.run();
     } catch (const Blueprint::Core::Exception& exception) {
         exception.log();
         return EXIT_FAILURE;
