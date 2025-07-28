@@ -26,9 +26,6 @@ void Blueprint::Editor::SceneEditorWindow::gui() {
     if (m_SceneManager.getSceneHolderCount() == 0) {
         return guiEmpty();
     }
-    if (m_SelectedSceneEditor == nullptr) {
-        m_SelectedSceneEditor = m_SceneManager.begin()->sceneEditor;
-    }
     if (!ImGui::BeginTabBar("Scene Editor tab bar", ImGuiTabBarFlags_Reorderable)) {
         return;
     }
