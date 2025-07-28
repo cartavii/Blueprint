@@ -1,6 +1,8 @@
 #include "Example/MyScene.hpp"
 #include <SFML/System/Time.hpp>
 
+Example::MyScene::MyScene() : m_RotationSpeed(60.f) {}
+
 void Example::MyScene::load(nlohmann::json& data) {
     if (data.contains("ImagePath")) {
         m_TextureResource = getTextureManager().getTextureResource(data["ImagePath"].get<std::filesystem::path>());
@@ -22,7 +24,7 @@ void Example::MyScene::load(nlohmann::json& data) {
 
 void Example::MyScene::update() {
     const sf::Time deltaTime = m_DeltaClock.restart();
-    m_Rectangle.rotate(sf::degrees(deltaTime.asSeconds()) * 5.f);
+    m_Rectangle.rotate(sf::degrees(deltaTime.asSeconds()) * m_RotationSpeed);
 }
 
 void Example::MyScene::render(sf::RenderTarget& renderTarget) {

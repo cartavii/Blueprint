@@ -10,6 +10,9 @@
 namespace Example {
 class MyScene final : public Blueprint::Editor::SceneEditor {
 public:
+    MyScene();
+
+public:
     void load(nlohmann::json& data) override;
 
     void update() override;
@@ -25,6 +28,7 @@ private:
     Blueprint::Resources::TextureResource m_TextureResource;
     sf::RectangleShape m_Rectangle;
     sf::Clock m_DeltaClock;
+    const float m_RotationSpeed;
 };
 } // Example
 
