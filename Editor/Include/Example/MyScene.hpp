@@ -10,9 +10,6 @@
 namespace Example {
 class MyScene final : public Blueprint::Editor::SceneEditor {
 public:
-    MyScene();
-
-public:
     void load(nlohmann::json& data) override;
 
     void update() override;
@@ -21,7 +18,10 @@ public:
     void onFocusGain() override;
     void onFocusLoss() override;
 
+    [[nodiscard]] Blueprint::Editor::Palette* getPalette() override;
+
 private:
+    Blueprint::Editor::Palette m_Palette;
     Blueprint::Resources::TextureResource m_TextureResource;
     sf::RectangleShape m_Rectangle;
     sf::Clock m_DeltaClock;
