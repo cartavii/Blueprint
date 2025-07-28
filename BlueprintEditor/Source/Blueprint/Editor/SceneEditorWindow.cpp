@@ -45,6 +45,13 @@ void Blueprint::Editor::SceneEditorWindow::gui() {
             if (space.y < 1.f) { space.y = 1.f; }
             m_RenderTexture.resize(sf::Vector2u(space.x, space.y));
             m_RenderTexture.clear();
+            const ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+            ImVec2 mousePos = ImGui::GetMousePos();
+            mousePos.x -= cursorPos.x;
+            mousePos.y -= cursorPos.y;
+            mousePos.x /= space.x;
+            mousePos.y /= space.y;
+            sceneEditor->m_MouseNormalPosition = sf::Vector2f(mousePos.x, mousePos.y);
             sceneEditor->update();
             sceneEditor->render(m_RenderTexture);
             m_RenderTexture.display();
