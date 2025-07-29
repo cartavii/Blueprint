@@ -11,3 +11,5 @@ add_subdirectory("BlueprintCore")
 add_subdirectory("BlueprintResources")
 add_subdirectory("BlueprintEditor")
 add_subdirectory("BlueprintGame")
+
+add_subdirectory("BlueprintExamples" EXCLUDE_FROM_ALL)
