@@ -9,11 +9,12 @@ target_compile_features(BlueprintResources PRIVATE cxx_std_17)
 target_include_directories(BlueprintResources PUBLIC "Include")
 target_link_libraries(BlueprintResources PUBLIC Blueprint::Core)
 
-add_custom_command(
-        TARGET BlueprintResources POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/Resources"
-        "${CMAKE_BINARY_DIR}/Resources"
-)
+function(copy_resources TARGET_NAME)
+        add_custom_command(
+                TARGET ${TARGET_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${CMAKE_CURRENT_SOURCE_DIR}/../Resources"
+                "${CMAKE_CURRENT_BINARY_DIR}/../Resources")
+endfunction()
 
 add_library(Blueprint::Resources ALIAS BlueprintResources)
