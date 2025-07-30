@@ -27,6 +27,7 @@ private:
 private:
     Palette* m_Palette;
     const float m_IconSize;
+    const float m_OutlineSize;
     const float m_Space;
     float m_Scale;
 };

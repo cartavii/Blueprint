@@ -8,6 +8,7 @@
 Blueprint::Editor::PaletteWindow::PaletteWindow(WindowManager& manager)
 : Window(manager, "Editor Palette", true, ImGuiWindowFlags_MenuBar)
 , m_Palette(nullptr)
+, m_OutlineSize(4.f)
 , m_IconSize(60.f)
 , m_Space(10.f)
 , m_Scale(1.f) {}
@@ -22,8 +23,8 @@ void Blueprint::Editor::PaletteWindow::gui() {
         return guiEmpty();
     }
     const ImVec2 padding = ImGui::GetContentRegionAvail();
-    const int columnsCount = std::max<int>(padding.x / (m_IconSize + m_Space * 2.f) / m_Scale, 1);
-    const ImVec2 size(columnsCount * (m_IconSize + m_Space * 2.f) * m_Scale, 0.f);
+    const int columnsCount = std::max<int>(padding.x / (m_IconSize + (m_Space + m_OutlineSize) * 2.f) / m_Scale, 1);
+    const ImVec2 size(columnsCount * (m_IconSize + (m_Space + m_OutlineSize) * 2.f) * m_Scale, 0.f);
     if (!ImGui::BeginTable("Editor Item Table", columnsCount, ImGuiTableFlags_None, size)) {
         return;
     }
@@ -105,10 +106,10 @@ void Blueprint::Editor::PaletteWindow::guiItem(const Palette::Item& item) {
 
 class IconStyle {
 public:
-    explicit IconStyle(const float scale) {
+    explicit IconStyle(const float outlineSize, const float scale) {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 0.40f));
         ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0f * scale);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, outlineSize * scale);
     }
 
     ~IconStyle() {
@@ -124,7 +125,7 @@ void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
     std::optional<IconStyle> style = std::nullopt;
 
     if (m_Palette->getSelectedItem() == &item) {
-        style.emplace(m_Scale);
+        style.emplace(m_OutlineSize, m_Scale);
     }
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + scaledSpace);
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + scaledSpace / 2.f);
