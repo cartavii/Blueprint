@@ -60,8 +60,8 @@ public:
     constIterator end() const;
 
 private:
-    nlohmann::json loadSceneData(const std::filesystem::path& path);
-    void saveSceneData(const std::filesystem::path& path, const nlohmann::json& sceneData);
+    nlohmann::ordered_json loadSceneData(const std::filesystem::path& path);
+    void saveSceneData(const std::filesystem::path& path, const nlohmann::ordered_json& sceneData);
 
 private:
     Application& m_Application;

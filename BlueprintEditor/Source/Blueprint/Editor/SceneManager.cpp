@@ -31,7 +31,7 @@ void Blueprint::Editor::SceneManager::loadSceneEditor(const std::filesystem::pat
     if (!isPathValid(path)) {
         throw Resources::FailedToOpenFileException(path.string());
     }
-    nlohmann::json sceneData = loadSceneData(getFullPath(path));
+    nlohmann::ordered_json sceneData = loadSceneData(getFullPath(path));
     if (!sceneData.contains("Type")) {
         throw SceneTypeMissing(path);
     }
@@ -45,7 +45,7 @@ void Blueprint::Editor::SceneManager::unloadSceneEditor(const std::filesystem::p
     for (auto it = begin(); it != end(); ++it) {
         if (auto [sceneEditor, keyName, otherPath] = *it; otherPath == path) {
             const std::filesystem::path fullPath = getFullPath(path);
-            nlohmann::json sceneData = loadSceneData(fullPath);
+            nlohmann::ordered_json sceneData = loadSceneData(fullPath);
             if (!sceneData.contains("Type")) {
                 sceneData["Type"] = keyName;
             }
@@ -61,7 +61,7 @@ void Blueprint::Editor::SceneManager::unloadSceneEditor(const std::filesystem::p
 void Blueprint::Editor::SceneManager::clear() {
     for (const auto [sceneEditor, keyName, path] : m_SceneHolders) {
         const std::filesystem::path fullPath = getFullPath(path);
-        nlohmann::json sceneData;
+        nlohmann::ordered_json sceneData;
         sceneData["Type"] = keyName;
         sceneEditor->save(sceneData);
         saveSceneData(fullPath, sceneData);
@@ -98,9 +98,9 @@ Blueprint::Editor::SceneManager::constIterator Blueprint::Editor::SceneManager::
     return m_SceneHolders.end();
 }
 
-nlohmann::json Blueprint::Editor::SceneManager::loadSceneData(const std::filesystem::path& path) {
+nlohmann::ordered_json Blueprint::Editor::SceneManager::loadSceneData(const std::filesystem::path& path) {
     std::ifstream file(path);
-    nlohmann::json sceneData;
+    nlohmann::ordered_json sceneData;
     if (file.is_open()) {
         file >> sceneData;
         file.close();
@@ -108,7 +108,7 @@ nlohmann::json Blueprint::Editor::SceneManager::loadSceneData(const std::filesys
     return sceneData;
 }
 
-void Blueprint::Editor::SceneManager::saveSceneData(const std::filesystem::path& path, const nlohmann::json& sceneData) {
+void Blueprint::Editor::SceneManager::saveSceneData(const std::filesystem::path& path, const nlohmann::ordered_json& sceneData) {
     std::ofstream file(path, std::ios::trunc);
     if (!file.is_open()) {
         return;
