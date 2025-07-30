@@ -28,6 +28,7 @@ public:
     ~TextureResource();
 
 public:
+    [[nodiscard]] const std::filesystem::path& getPath() const;
     [[nodiscard]] const sf::Texture* getTexture() const;
 
 public:

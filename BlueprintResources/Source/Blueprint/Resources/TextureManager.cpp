@@ -30,6 +30,10 @@ Blueprint::Resources::TextureResource::~TextureResource() {
     decrease();
 }
 
+const std::filesystem::path& Blueprint::Resources::TextureResource::getPath() const {
+    return m_Path;
+}
+
 const sf::Texture* Blueprint::Resources::TextureResource::getTexture() const {
     return m_Texture;
 }
