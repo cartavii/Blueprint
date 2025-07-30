@@ -16,8 +16,8 @@ public:
     virtual ~SceneEditor() = default;
 
 public:
-    virtual void save(const nlohmann::json& data) {}
-    virtual void load(nlohmann::json& data) {}
+    virtual void load(const nlohmann::json& data) {}
+    virtual void save(nlohmann::json& data) {}
 
     virtual void update() {}
     virtual void render(sf::RenderTarget& renderTarget) {}
