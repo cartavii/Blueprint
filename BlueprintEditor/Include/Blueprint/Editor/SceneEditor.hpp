@@ -33,6 +33,7 @@ public:
     [[nodiscard]] const Resources::TextureManager& getTextureManager() const;
 
     [[nodiscard]] const sf::Vector2f& getMouseNormalPosition() const;
+    [[nodiscard]] sf::Vector2f getMousePosition(const sf::Vector2f& viewSize) const;
     [[nodiscard]] sf::Vector2f getMouseViewPosition(const sf::View& view) const;
 
 private:

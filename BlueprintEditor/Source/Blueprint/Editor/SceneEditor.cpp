@@ -19,10 +19,14 @@ const sf::Vector2f& Blueprint::Editor::SceneEditor::getMouseNormalPosition() con
     return m_MouseNormalPosition;
 }
 
-sf::Vector2f Blueprint::Editor::SceneEditor::getMouseViewPosition(const sf::View& view) const {
-    const sf::Vector2f viewSize = view.getSize();
+sf::Vector2f Blueprint::Editor::SceneEditor::getMousePosition(const sf::Vector2f& viewSize) const {
     sf::Vector2f mousePosition = m_MouseNormalPosition;
     mousePosition.x *= viewSize.x;
     mousePosition.y *= viewSize.y;
     return mousePosition;
+}
+
+sf::Vector2f Blueprint::Editor::SceneEditor::getMouseViewPosition(const sf::View& view) const {
+    const sf::Vector2f viewSize = view.getSize();
+    return getMousePosition(viewSize) + view.getCenter() - viewSize / 2.f;
 }
