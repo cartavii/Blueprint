@@ -87,14 +87,14 @@ Blueprint::Resources::TextureResource Blueprint::Resources::TextureManager::getT
         throw TextureNotFoundException();
     }
     const std::filesystem::path fullPath = getFullPath(texturePath);
-    if (const auto it = m_Textures.find(fullPath); it != m_Textures.end()) {
-        return TextureResource(this, fullPath, it->second.texture);
+    if (const auto it = m_Textures.find(texturePath); it != m_Textures.end()) {
+        return TextureResource(this, texturePath, it->second.texture);
     }
     sf::Texture* texture = new sf::Texture;
     if (!texture->loadFromFile(fullPath)) {
         delete texture;
         throw TextureNotFoundException();
     }
-    m_Textures[fullPath] = {texture, 0};
-    return TextureResource(this, fullPath, texture);
+    m_Textures[texturePath] = {texture, 0};
+    return TextureResource(this, texturePath, texture);
 }

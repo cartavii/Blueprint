@@ -44,12 +44,13 @@ void Blueprint::Editor::SceneManager::loadSceneEditor(const std::filesystem::pat
 void Blueprint::Editor::SceneManager::unloadSceneEditor(const std::filesystem::path& path) {
     for (auto it = begin(); it != end(); ++it) {
         if (auto [sceneEditor, keyName, otherPath] = *it; otherPath == path) {
-            nlohmann::json sceneData = loadSceneData(getFullPath(path));
+            const std::filesystem::path fullPath = getFullPath(path);
+            nlohmann::json sceneData = loadSceneData(fullPath);
             if (!sceneData.contains("Type")) {
                 sceneData["Type"] = keyName;
             }
             sceneEditor->save(sceneData);
-            saveSceneData(path, sceneData);
+            saveSceneData(fullPath, sceneData);
             delete sceneEditor;
             m_SceneHolders.erase(it);
             return;
@@ -59,12 +60,11 @@ void Blueprint::Editor::SceneManager::unloadSceneEditor(const std::filesystem::p
 
 void Blueprint::Editor::SceneManager::clear() {
     for (const auto [sceneEditor, keyName, path] : m_SceneHolders) {
-        nlohmann::json sceneData = loadSceneData(getFullPath(path));
-        if (!sceneData.contains("Type")) {
-            sceneData["Type"] = keyName;
-        }
+        const std::filesystem::path fullPath = getFullPath(path);
+        nlohmann::json sceneData;
+        sceneData["Type"] = keyName;
         sceneEditor->save(sceneData);
-        saveSceneData(path, sceneData);
+        saveSceneData(fullPath, sceneData);
         delete sceneEditor;
     }
     m_SceneHolders.clear();
@@ -109,10 +109,10 @@ nlohmann::json Blueprint::Editor::SceneManager::loadSceneData(const std::filesys
 }
 
 void Blueprint::Editor::SceneManager::saveSceneData(const std::filesystem::path& path, const nlohmann::json& sceneData) {
-    std::ofstream file(path);
+    std::ofstream file(path, std::ios::trunc);
     if (!file.is_open()) {
         return;
     }
-    file << sceneData << sceneData.dump(4);
+    file << std::setw(4) << sceneData;
     file.close();
 }
