@@ -14,6 +14,7 @@ Blueprint::Editor::GuiApi::GuiApi(sf::RenderWindow& renderWindow) : m_RenderWind
     }
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
 }
 
 Blueprint::Editor::GuiApi::~GuiApi() {
