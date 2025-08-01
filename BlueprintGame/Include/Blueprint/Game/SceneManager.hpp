@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <queue>
 #include <unordered_map>
-#include <vector>
 #include <SFML/System/Clock.hpp>
 
 #include "Blueprint/Core/Exception.hpp"
@@ -73,7 +72,7 @@ public:
     [[nodiscard]] bool isSceneCurrent(const std::filesystem::path& path) const;
 
 private:
-    nlohmann::json loadData(const std::filesystem::path& path);
+    nlohmann::ordered_json loadData(const std::filesystem::path& path);
     void saveData(const nlohmann::json& data, const std::filesystem::path& path);
     std::string getSceneType(const std::filesystem::path& path);
     void updateCurrentScene();
@@ -87,7 +86,7 @@ private:
     Scene* m_CurrentScene;
     Scene* m_NextCurrentScene;
     std::unordered_map<std::filesystem::path, Scene*> m_Scenes;
-    std::unordered_map<std::string, Scene*(*)(SceneManager&, const std::filesystem::path&)> m_Create;
+    std::unordered_map<std::string, Scene*(*)(SceneManager&)> m_Create;
     std::queue<std::pair<std::filesystem::path, Scene*>> m_LoadQueue;
     std::queue<std::pair<std::filesystem::path, Scene*>> m_UnloadQueue;
 };

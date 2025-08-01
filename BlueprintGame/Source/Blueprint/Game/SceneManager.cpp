@@ -71,14 +71,14 @@ void Blueprint::Game::SceneManager::loadScene(const std::filesystem::path& path)
     if (!isPathValid(path)) {
         throw SceneInvalidPathException(path.string());
     }
-    if (const std::filesystem::path extension = path.extension(); extension.string() != ".bpscene") {
+    if (const std::filesystem::path extension = path.extension(); extension.string() != ".scenebp") {
         throw SceneFileExtensionException(extension.string());
     }
     const std::string sceneType = getSceneType(path);
     if (m_Create.find(sceneType) == m_Create.end()) {
         throw SceneUnsupportedType(sceneType);
     }
-    Scene* scene = m_Create.at(sceneType)(*this, path);
+    Scene* scene = m_Create.at(sceneType)(*this);
     if (m_CurrentScene != nullptr) {
         m_LoadQueue.push({path, scene});
     } else {
@@ -124,13 +124,13 @@ bool Blueprint::Game::SceneManager::isSceneCurrent(const std::filesystem::path& 
     return it->second == m_CurrentScene;
 }
 
-nlohmann::json Blueprint::Game::SceneManager::loadData(const std::filesystem::path& path) {
+nlohmann::ordered_json Blueprint::Game::SceneManager::loadData(const std::filesystem::path& path) {
     const std::filesystem::path fullPath = getFullPath(path);
     std::ifstream file(fullPath);
     if (!file.is_open()) {
         throw Resources::FailedToOpenFileException(fullPath.string());
     }
-    nlohmann::json data;
+    nlohmann::ordered_json data;
     if (!(file >> data)) {
         throw FailedToParseSceneDataException(fullPath.string());
     }
@@ -182,7 +182,7 @@ void Blueprint::Game::SceneManager::unloadScenes() {
     while (!m_UnloadQueue.empty()) {
         auto [path, scene] = m_UnloadQueue.front();
         m_UnloadQueue.pop();
-        nlohmann::json data;
+        nlohmann::ordered_json data;
         data["Type"] = getSceneType(path); // rework later
         scene->save(data);
         saveData(data, path);
