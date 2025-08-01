@@ -133,7 +133,10 @@ void Blueprint::Editor::PaletteWindow::guiItemIcon(const Palette::Item& item) {
     if (itemTexture == nullptr) {
         isButtonPressed = ImGui::Button("##Item Button", ImVec2(scaledIconSize, scaledIconSize));
     } else {
-        const sf::Sprite sprite(*itemTexture);
+        sf::Sprite sprite(*itemTexture);
+        if (item.textureRect != sf::IntRect{}) {
+            sprite.setTextureRect(item.textureRect);
+        }
         isButtonPressed = ImGui::ImageButton("##Item Button", sprite, sf::Vector2f(scaledIconSize, scaledIconSize));
     }
     if (isButtonPressed) {

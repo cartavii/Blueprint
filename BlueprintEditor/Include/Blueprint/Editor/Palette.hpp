@@ -11,6 +11,7 @@ public:
     struct Item {
         Resources::TextureResource textureResource;
         const char* name;
+        sf::IntRect textureRect = {};
     };
     using iterator = std::vector<Item>::iterator;
     using constIterator = std::vector<Item>::const_iterator;
