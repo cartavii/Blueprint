@@ -1,6 +1,6 @@
 #include "Blueprint/Game/Scene.hpp"
 
-Blueprint::Game::Scene::Scene(SceneManager& manager, const std::filesystem::path& path) : m_Manager(manager) {}
+Blueprint::Game::Scene::Scene(SceneManager& manager) : m_Manager(manager) {}
 
 Blueprint::Game::SceneManager& Blueprint::Game::Scene::getSceneManager() {
     return m_Manager;
