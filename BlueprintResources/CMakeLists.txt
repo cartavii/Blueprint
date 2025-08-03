@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(BlueprintResources LANGUAGES CXX)
 
 file(GLOB_RECURSE BLUEPRINT_RESOURCES_SOURCES "Source/*.cpp")
-add_library(BlueprintResources STATIC ${BLUEPRINT_RESOURCES_SOURCES}
-        Source/Blueprint/Resources/ResourceManager.cpp)
+add_library(BlueprintResources STATIC ${BLUEPRINT_RESOURCES_SOURCES})
 target_compile_features(BlueprintResources PRIVATE cxx_std_17)
 
 target_include_directories(BlueprintResources PUBLIC "Include")
