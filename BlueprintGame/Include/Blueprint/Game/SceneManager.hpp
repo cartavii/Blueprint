@@ -87,6 +87,7 @@ private:
     sf::Clock m_DeltaClock;
     Scene* m_CurrentScene;
     Scene* m_NextCurrentScene;
+    bool m_UpdateCurrentScene;
     std::list<std::pair<std::filesystem::path, Scene*>> m_Scenes;
     std::list<std::pair<std::filesystem::path, Scene*>> m_LoadQueue;
     std::list<std::pair<std::filesystem::path, Scene*>> m_UnloadQueue;

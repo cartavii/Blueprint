@@ -26,7 +26,8 @@ Blueprint::Game::SceneManager::SceneManager(Application& application)
 , m_Application(application)
 , m_Fabric(application.getSceneFabric())
 , m_CurrentScene(nullptr)
-, m_NextCurrentScene(nullptr) {}
+, m_NextCurrentScene(nullptr)
+, m_UpdateCurrentScene(false) {}
 
 Blueprint::Game::SceneManager::~SceneManager() {
     loadScenes();
@@ -110,11 +111,13 @@ void Blueprint::Game::SceneManager::reloadScene(Scene& scene) {
 void Blueprint::Game::SceneManager::setCurrentScene(const std::filesystem::path& path) {
     if (Scene* scene = find(path); scene != nullptr) {
         m_NextCurrentScene = scene;
+        m_UpdateCurrentScene = true;
         return;
     }
     for (auto it = m_LoadQueue.begin(); it != m_LoadQueue.end(); ++it) {
         if (it->first == path) {
             m_NextCurrentScene = it->second;
+            m_UpdateCurrentScene = true;
             return;
         }
     }
@@ -128,10 +131,12 @@ void Blueprint::Game::SceneManager::setCurrentScene(Scene& scene) {
         }
     }
     m_NextCurrentScene = &scene;
+    m_UpdateCurrentScene = true;
 }
 
 void Blueprint::Game::SceneManager::resetCurrentScene() {
     m_NextCurrentScene = nullptr;
+    m_UpdateCurrentScene = true;
 }
 
 std::filesystem::path Blueprint::Game::SceneManager::getFrontScene() const {
@@ -220,9 +225,10 @@ std::string Blueprint::Game::SceneManager::getSceneType(const std::filesystem::p
 }
 
 void Blueprint::Game::SceneManager::updateCurrentScene() {
-    if (m_NextCurrentScene != nullptr) {
+    if (m_UpdateCurrentScene) {
         m_CurrentScene = m_NextCurrentScene;
         m_NextCurrentScene = nullptr;
+        m_UpdateCurrentScene = false;
     }
 }
 
