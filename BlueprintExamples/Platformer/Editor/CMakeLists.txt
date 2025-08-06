@@ -6,6 +6,7 @@ add_executable(PlatformerEditor ${PLATFORMER_EDITOR_SOURCES})
 target_compile_features(PlatformerEditor PRIVATE cxx_std_17)
 
 target_include_directories(PlatformerEditor PRIVATE "Include")
+target_link_libraries(PlatformerEditor PRIVATE PlatformerCore)
 target_link_libraries(PlatformerEditor PRIVATE Blueprint::Editor)
 
 copy_resources(PlatformerEditor)
