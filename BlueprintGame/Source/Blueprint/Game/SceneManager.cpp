@@ -81,13 +81,13 @@ void Blueprint::Game::SceneManager::unloadScene(const std::filesystem::path& pat
         throw SceneNotFoundException(path.string());
     }
     m_UnloadQueue.push_back({path, scene});
-    remove(path);
+    removeScene(path);
 }
 
 void Blueprint::Game::SceneManager::unloadScene(Scene& scene) {
     if (const std::filesystem::path path = find(scene); !path.empty()) {
         m_UnloadQueue.push_back({path, &scene});
-        remove(path);
+        removeScene(path);
     }
 }
 
@@ -247,7 +247,7 @@ void Blueprint::Game::SceneManager::unloadScenes() {
 }
 
 void Blueprint::Game::SceneManager::unloadScene(const std::filesystem::path& path, Scene& scene) {
-    nlohmann::ordered_json data;
+    nlohmann::ordered_json data = loadData(path);
     data["Type"] = getSceneType(path);
     scene.save(data);
     saveData(data, path);
