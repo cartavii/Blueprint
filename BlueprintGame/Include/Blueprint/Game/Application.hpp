@@ -1,6 +1,7 @@
 #ifndef BLUEPRINT_GAME_APPLICATION_HPP
 #define BLUEPRINT_GAME_APPLICATION_HPP
 
+#include "Blueprint/Game/SceneFabric.hpp"
 #include "Blueprint/Game/SceneManager.hpp"
 #include "Blueprint/Resources/TextureManager.hpp"
 
@@ -16,6 +17,9 @@ public:
 
     [[nodiscard]] sf::RenderWindow& getRenderWindow();
     [[nodiscard]] const sf::RenderWindow& getRenderWindow() const;
+
+    [[nodiscard]] SceneFabric& getSceneFabric();
+    [[nodiscard]] const SceneFabric& getSceneFabric() const;
 
     [[nodiscard]] SceneManager& getSceneManager();
     [[nodiscard]] const SceneManager& getSceneManager() const;
@@ -33,6 +37,7 @@ protected:
 private:
     sf::RenderWindow m_RenderWindow;
     Resources::TextureManager m_TextureManager;
+    SceneFabric m_SceneFabric;
     SceneManager m_SceneManager;
 };
 } // Blueprint::Editor

@@ -2,6 +2,7 @@
 
 Blueprint::Game::Application::Application(const sf::Vector2u& windowResolution, const sf::String& windowTitle)
 : m_RenderWindow(sf::VideoMode(windowResolution), windowTitle)
+, m_SceneFabric(*this)
 , m_SceneManager(*this) {}
 
 void Blueprint::Game::Application::run() {
@@ -18,6 +19,14 @@ sf::RenderWindow& Blueprint::Game::Application::getRenderWindow() {
 
 const sf::RenderWindow& Blueprint::Game::Application::getRenderWindow() const {
     return m_RenderWindow;
+}
+
+Blueprint::Game::SceneFabric& Blueprint::Game::Application::getSceneFabric() {
+    return m_SceneFabric;
+}
+
+const Blueprint::Game::SceneFabric& Blueprint::Game::Application::getSceneFabric() const {
+    return m_SceneFabric;
 }
 
 Blueprint::Game::SceneManager& Blueprint::Game::Application::getSceneManager() {

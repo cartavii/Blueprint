@@ -5,9 +5,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-Blueprint::Game::SceneAlreadyRegisteredException::SceneAlreadyRegisteredException(const std::string& typeName)
-: Exception("Scene '" + typeName + "' is already registered") {}
-
 Blueprint::Game::SceneInvalidPathException::SceneInvalidPathException(const std::string& path)
 : Exception("Invalid scene path: '" + path + "'") {}
 
@@ -23,12 +20,10 @@ Blueprint::Game::SceneDataTypeMissingException::SceneDataTypeMissingException(co
 Blueprint::Game::SceneNotFoundException::SceneNotFoundException(const std::string& path)
 : Exception("Failed to find scene with path '" + path + "'") {}
 
-Blueprint::Game::SceneUnsupportedType::SceneUnsupportedType(const std::string& sceneType)
-: Exception("Scene type '" + sceneType + "' is not registered") {}
-
 Blueprint::Game::SceneManager::SceneManager(Application& application)
 : ResourceManager(Resources::SubFolder{"Scenes"})
 , m_Application(application)
+, m_Fabric(application.getSceneFabric())
 , m_CurrentScene(nullptr)
 , m_NextCurrentScene(nullptr) {}
 
@@ -75,10 +70,7 @@ void Blueprint::Game::SceneManager::loadScene(const std::filesystem::path& path)
         throw SceneFileExtensionException(extension.string());
     }
     const std::string sceneType = getSceneType(path);
-    if (m_Create.find(sceneType) == m_Create.end()) {
-        throw SceneUnsupportedType(sceneType);
-    }
-    Scene* scene = m_Create.at(sceneType)(*this);
+    Scene* scene = m_Fabric.createScene(sceneType);
     if (m_CurrentScene != nullptr) {
         m_LoadQueue.push({path, scene});
     } else {

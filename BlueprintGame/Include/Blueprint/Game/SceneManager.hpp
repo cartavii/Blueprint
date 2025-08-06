@@ -13,11 +13,7 @@
 namespace Blueprint::Game {
 class Application;
 class Scene;
-
-class SceneAlreadyRegisteredException final : public Core::Exception {
-public:
-    explicit SceneAlreadyRegisteredException(const std::string& typeName);
-};
+class SceneFabric;
 
 class SceneInvalidPathException final : public Core::Exception {
 public:
@@ -44,11 +40,6 @@ public:
     explicit SceneNotFoundException(const std::string& path);
 };
 
-class SceneUnsupportedType final : public Core::Exception {
-public:
-    explicit SceneUnsupportedType(const std::string& sceneType);
-};
-
 class SceneManager : private Resources::ResourceManager {
 public:
     explicit SceneManager(Application& application);
@@ -62,8 +53,6 @@ public:
     Application& getApplication();
     const Application& getApplication() const;
 
-    template<class TScene>
-    void registerScene(const std::string& typeName);
     void loadScene(const std::filesystem::path& path);
     void unloadScene(const std::filesystem::path& path);
 
@@ -82,16 +71,14 @@ private:
 
 private:
     Application& m_Application;
+    SceneFabric& m_Fabric;
     sf::Clock m_DeltaClock;
     Scene* m_CurrentScene;
     Scene* m_NextCurrentScene;
     std::unordered_map<std::filesystem::path, Scene*> m_Scenes;
-    std::unordered_map<std::string, Scene*(*)(SceneManager&)> m_Create;
     std::queue<std::pair<std::filesystem::path, Scene*>> m_LoadQueue;
     std::queue<std::pair<std::filesystem::path, Scene*>> m_UnloadQueue;
 };
 } // Blueprint::Editor
-
-#include "SceneManager.inl"
 
 #endif // BLUEPRINT_GAME_SCENE_MANAGER_HPP
