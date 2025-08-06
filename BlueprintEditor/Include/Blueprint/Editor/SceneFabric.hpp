@@ -1,8 +1,6 @@
 #ifndef BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 #define BLUEPRINT_EDITOR_SCENE_FABRIC_HPP
 
-#include <iostream>
-
 #include "Blueprint/Core/Exception.hpp"
 #include "Blueprint/Editor/Palette.hpp"
 #include "Blueprint/Editor/SceneEditor.hpp"
