@@ -1,14 +1,14 @@
 #ifndef BLUEPRINT_GAME_SCENE_MANAGER_HPP
 #define BLUEPRINT_GAME_SCENE_MANAGER_HPP
 
-#include <filesystem>
-#include <queue>
-#include <unordered_map>
-#include <SFML/System/Clock.hpp>
-
 #include "Blueprint/Core/Exception.hpp"
 #include "Blueprint/Game/Scene.hpp"
 #include "Blueprint/Resources/ResourceManager.hpp"
+
+#include <SFML/System/Clock.hpp>
+
+#include <filesystem>
+#include <list>
 
 namespace Blueprint::Game {
 class Application;
@@ -55,19 +55,31 @@ public:
 
     void loadScene(const std::filesystem::path& path);
     void unloadScene(const std::filesystem::path& path);
+    void unloadScene(Scene& scene);
+    void reloadScene(const std::filesystem::path& path);
+    void reloadScene(Scene& scene);
 
     void setCurrentScene(const std::filesystem::path& path);
-    [[nodiscard]] bool isSceneLoaded(const std::filesystem::path& path) const;
-    [[nodiscard]] bool isSceneCurrent(const std::filesystem::path& path) const;
+    void setCurrentScene(Scene& scene);
+    void resetCurrentScene();
+
+    [[nodiscard]] std::filesystem::path getFrontScene() const;
+    [[nodiscard]] std::filesystem::path getBackScene() const;
 
 private:
-    nlohmann::ordered_json loadData(const std::filesystem::path& path);
+    void addScene(const std::filesystem::path& path, Scene* scene);
+    void removeScene(const std::filesystem::path& path);
+    [[nodiscard]] Scene* find(const std::filesystem::path& path) const;
+    [[nodiscard]] std::filesystem::path find(const Scene& scene) const;
+
+    [[nodiscard]] nlohmann::ordered_json loadData(const std::filesystem::path& path);
     void saveData(const nlohmann::json& data, const std::filesystem::path& path);
-    std::string getSceneType(const std::filesystem::path& path);
+    [[nodiscard]] std::string getSceneType(const std::filesystem::path& path);
     void updateCurrentScene();
     void loadScenes();
-    void loadScene(const std::filesystem::path& path, Scene* scene);
+    void loadScene(const std::filesystem::path& path, Scene& scene);
     void unloadScenes();
+    void unloadScene(const std::filesystem::path& path, Scene& scene);
 
 private:
     Application& m_Application;
@@ -75,9 +87,9 @@ private:
     sf::Clock m_DeltaClock;
     Scene* m_CurrentScene;
     Scene* m_NextCurrentScene;
-    std::unordered_map<std::filesystem::path, Scene*> m_Scenes;
-    std::queue<std::pair<std::filesystem::path, Scene*>> m_LoadQueue;
-    std::queue<std::pair<std::filesystem::path, Scene*>> m_UnloadQueue;
+    std::list<std::pair<std::filesystem::path, Scene*>> m_Scenes;
+    std::list<std::pair<std::filesystem::path, Scene*>> m_LoadQueue;
+    std::list<std::pair<std::filesystem::path, Scene*>> m_UnloadQueue;
 };
 } // Blueprint::Editor
 
