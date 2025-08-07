@@ -31,7 +31,7 @@ Blueprint::Game::SceneManager::SceneManager(Application& application)
 
 Blueprint::Game::SceneManager::~SceneManager() {
     loadScenes();
-    for (auto [path, scene] : m_Scenes) {
+    for (auto [path, scene]: m_Scenes) {
         delete scene;
     }
     unloadScenes();
@@ -73,7 +73,7 @@ void Blueprint::Game::SceneManager::loadScene(const std::filesystem::path& path)
         throw SceneFileExtensionException(extension.string());
     }
     const std::string sceneType = getSceneType(path);
-    Scene* scene = m_Fabric.createScene(sceneType);
+    Scene*            scene     = m_Fabric.createScene(sceneType);
     m_LoadQueue.push_back({path, scene});
 }
 
@@ -109,13 +109,13 @@ void Blueprint::Game::SceneManager::reloadScene(Scene& scene) {
 
 void Blueprint::Game::SceneManager::setCurrentScene(const std::filesystem::path& path) {
     if (Scene* scene = find(path); scene != nullptr) {
-        m_NextCurrentScene = scene;
+        m_NextCurrentScene   = scene;
         m_UpdateCurrentScene = true;
         return;
     }
     for (auto it = m_LoadQueue.begin(); it != m_LoadQueue.end(); ++it) {
         if (it->first == path) {
-            m_NextCurrentScene = it->second;
+            m_NextCurrentScene   = it->second;
             m_UpdateCurrentScene = true;
             return;
         }
@@ -124,17 +124,17 @@ void Blueprint::Game::SceneManager::setCurrentScene(const std::filesystem::path&
 }
 
 void Blueprint::Game::SceneManager::setCurrentScene(Scene& scene) {
-    for (const auto& [path, otherScene] : m_UnloadQueue) {
+    for (const auto& [path, otherScene]: m_UnloadQueue) {
         if (otherScene == &scene) {
             return;
         }
     }
-    m_NextCurrentScene = &scene;
+    m_NextCurrentScene   = &scene;
     m_UpdateCurrentScene = true;
 }
 
 void Blueprint::Game::SceneManager::resetCurrentScene() {
-    m_NextCurrentScene = nullptr;
+    m_NextCurrentScene   = nullptr;
     m_UpdateCurrentScene = true;
 }
 
@@ -172,7 +172,7 @@ void Blueprint::Game::SceneManager::removeScene(const std::filesystem::path& pat
 }
 
 Blueprint::Game::Scene* Blueprint::Game::SceneManager::find(const std::filesystem::path& path) const {
-    for (const auto& [otherPath, scene] : m_Scenes) {
+    for (const auto& [otherPath, scene]: m_Scenes) {
         if (path == otherPath) {
             return scene;
         }
@@ -181,7 +181,7 @@ Blueprint::Game::Scene* Blueprint::Game::SceneManager::find(const std::filesyste
 }
 
 std::filesystem::path Blueprint::Game::SceneManager::find(const Scene& scene) const {
-    for (const auto& [path, otherScene] : m_Scenes) {
+    for (const auto& [path, otherScene]: m_Scenes) {
         if (&scene == otherScene) {
             return path;
         }
@@ -191,7 +191,7 @@ std::filesystem::path Blueprint::Game::SceneManager::find(const Scene& scene) co
 
 nlohmann::ordered_json Blueprint::Game::SceneManager::loadData(const std::filesystem::path& path) {
     const std::filesystem::path fullPath = getFullPath(path);
-    std::ifstream file(fullPath);
+    std::ifstream               file(fullPath);
     if (!file.is_open()) {
         throw Resources::FailedToOpenFileException(fullPath.string());
     }
@@ -205,7 +205,7 @@ nlohmann::ordered_json Blueprint::Game::SceneManager::loadData(const std::filesy
 
 void Blueprint::Game::SceneManager::saveData(const nlohmann::json& data, const std::filesystem::path& path) {
     const std::filesystem::path fullPath = getFullPath(path);
-    std::ofstream file(fullPath);
+    std::ofstream               file(fullPath);
     if (!file.is_open()) {
         throw Resources::FailedToOpenFileException(fullPath.string());
     }
@@ -225,14 +225,14 @@ std::string Blueprint::Game::SceneManager::getSceneType(const std::filesystem::p
 
 void Blueprint::Game::SceneManager::updateCurrentScene() {
     if (m_UpdateCurrentScene) {
-        m_CurrentScene = m_NextCurrentScene;
-        m_NextCurrentScene = nullptr;
+        m_CurrentScene       = m_NextCurrentScene;
+        m_NextCurrentScene   = nullptr;
         m_UpdateCurrentScene = false;
     }
 }
 
 void Blueprint::Game::SceneManager::loadScenes() {
-    for (auto [path, scene] : m_LoadQueue) {
+    for (auto [path, scene]: m_LoadQueue) {
         loadScene(path, *scene);
     }
     m_LoadQueue.clear();
@@ -244,7 +244,7 @@ void Blueprint::Game::SceneManager::loadScene(const std::filesystem::path& path,
 }
 
 void Blueprint::Game::SceneManager::unloadScenes() {
-    for (auto [path, scene] : m_UnloadQueue) {
+    for (auto [path, scene]: m_UnloadQueue) {
         unloadScene(path, *scene);
         delete scene;
     }
@@ -253,13 +253,13 @@ void Blueprint::Game::SceneManager::unloadScenes() {
 
 void Blueprint::Game::SceneManager::unloadScene(const std::filesystem::path& path, Scene& scene) {
     nlohmann::ordered_json data = loadData(path);
-    data["Type"] = getSceneType(path);
+    data["Type"]                = getSceneType(path);
     scene.save(data);
     saveData(data, path);
 }
 
 void Blueprint::Game::SceneManager::reloadScenes() {
-    for (auto& [path, scene] : m_ReloadQueue) {
+    for (auto& [path, scene]: m_ReloadQueue) {
         reloadScene(path, scene);
     }
     m_ReloadQueue.clear();
@@ -281,7 +281,7 @@ void Blueprint::Game::SceneManager::reloadScene(const std::filesystem::path& pat
     delete scene;
     scene = m_Fabric.createScene(getSceneType(path));
     scene->load(loadData(path));
-    for (auto& [otherPath, otherScene] : m_Scenes) {
+    for (auto& [otherPath, otherScene]: m_Scenes) {
         if (otherPath == path) {
             otherScene = scene;
         }
