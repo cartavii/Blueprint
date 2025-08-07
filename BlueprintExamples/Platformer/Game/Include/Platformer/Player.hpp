@@ -1,7 +1,6 @@
 #ifndef PLATFORMER_GAME_PLAYER_HPP
 #define PLATFORMER_GAME_PLAYER_HPP
 
-#include "Platformer/TilesHolder.hpp"
 #include "Platformer/PhysicObject.hpp"
 
 namespace Platformer {
@@ -21,23 +20,29 @@ private:
     void loadTextures();
 
     void updateWalking(float deltaTime);
+
     void updateJump(float deltaTime);
+
     void updateCamera();
+
+    void updateDead();
+
     void updateDoor();
+
     void updateTexture(float deltaTime);
 
 private:
-    CastleLevel& m_CastleLevel;
-    Camera& m_Camera;
+    CastleLevel&                          m_CastleLevel;
+    Camera&                               m_Camera;
     Blueprint::Resources::TextureResource m_IdleResource;
     Blueprint::Resources::TextureResource m_WalkResource;
     Blueprint::Resources::TextureResource m_JumpResource;
-    const sf::Vector2f m_Origin;
-    const float m_HorizontalSpeed;
-    const float m_JumpForce;
-    float m_WalkFrame;
-    float m_WalkTime;
-    const float m_WalkSwitchTime;
+    const sf::Vector2f                    m_Origin;
+    const float                           m_HorizontalSpeed;
+    const float                           m_JumpForce;
+    float                                 m_WalkFrame;
+    float                                 m_WalkTime;
+    const float                           m_WalkSwitchTime;
 };
 } // Platformer
 

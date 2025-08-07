@@ -6,6 +6,7 @@
 Platformer::CastleLevel::CastleLevel(Blueprint::Game::SceneManager& manager)
 : Scene(manager)
 , m_Player(*this)
+, m_Shaker(m_Camera)
 , m_BackgroundColor(25, 5, 25) {
     m_Door.setPosition(sf::Vector2f(-16.f, 0.f));
 }
@@ -22,7 +23,12 @@ void Platformer::CastleLevel::load(const nlohmann::ordered_json& data) {
 
 void Platformer::CastleLevel::update(const sf::Time& deltaTime) {
     const float dt = deltaTime.asSeconds() * 60.f;
-    m_Player.update(dt);
+    if (m_PlayerDead == std::nullopt) {
+        m_Player.update(dt);
+    } else {
+        m_PlayerDead->update(dt);
+    }
+    m_Shaker.update(dt);
 }
 
 void Platformer::CastleLevel::render(sf::RenderTarget& renderTarget) {
@@ -32,7 +38,21 @@ void Platformer::CastleLevel::render(sf::RenderTarget& renderTarget) {
     m_Ground.render(renderTarget);
     m_Blocks.render(renderTarget);
     m_Door.render(renderTarget);
-    m_Player.render(renderTarget);
+    if (m_PlayerDead == std::nullopt) {
+        m_Player.render(renderTarget);
+    } else {
+        m_PlayerDead->render(renderTarget);
+    }
+}
+
+void Platformer::CastleLevel::setPlayerDead() {
+    m_PlayerDead.emplace(*this);
+    m_PlayerDead->setPosition(m_Player.getPosition() + sf::Vector2f(0.f, 8.f));
+}
+
+void Platformer::CastleLevel::restartScene() {
+    Blueprint::Game::SceneManager& sceneManager = getSceneManager();
+    sceneManager.reloadScene(*this);
 }
 
 void Platformer::CastleLevel::setNextScene() {
@@ -51,6 +71,14 @@ Platformer::Camera& Platformer::CastleLevel::getCamera() {
 
 const Platformer::Camera& Platformer::CastleLevel::getCamera() const {
     return m_Camera;
+}
+
+Platformer::CameraShaker& Platformer::CastleLevel::getCameraShaker() {
+    return m_Shaker;
+}
+
+const Platformer::CameraShaker& Platformer::CastleLevel::getCameraShaker() const {
+    return m_Shaker;
 }
 
 Platformer::TilesHolder& Platformer::CastleLevel::getGround() {
@@ -83,7 +111,8 @@ void Platformer::CastleLevel::loadCamera(const nlohmann::ordered_json& data) {
     }
 }
 
-void Platformer::CastleLevel::loadTiles(const nlohmann::ordered_json& data, TilesHolder& tiles, const std::filesystem::path& texturePath, const char* key) {
+void Platformer::CastleLevel::loadTiles(const nlohmann::ordered_json& data, TilesHolder&       tiles,
+                                        const std::filesystem::path&  texturePath, const char* key) {
     if (!data.contains(key)) {
         return;
     }
@@ -105,7 +134,6 @@ void Platformer::CastleLevel::loadDoor(const nlohmann::ordered_json& data) {
         m_Door.load(data["Door"]);
     }
 }
-
 
 void Platformer::CastleLevel::loadNextSceneData(const nlohmann::ordered_json& data) {
     if (data.contains("NextScene")) {

@@ -13,7 +13,7 @@ public:
     virtual ~SpriteObject() = default;
 
 public:
-    virtual void load(const nlohmann::ordered_json& data) = 0;
+    virtual void load(const nlohmann::ordered_json& data) {};
 
     void render(sf::RenderTarget& renderTarget);
 

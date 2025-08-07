@@ -15,6 +15,9 @@ void Platformer::Camera::setCenter(sf::Vector2f center) {
     } else if (m_RightMostCenter != 0.f && center.x > m_RightMostCenter) {
         center.x = m_RightMostCenter;
     }
+    if (const float halfHeight = m_View.getSize().y / 2.f; center.y != halfHeight) {
+        center.y = halfHeight;
+    }
     m_View.setCenter(center);
 }
 

@@ -31,8 +31,9 @@ void Platformer::Player::update(const float deltaTime) {
     updateWalking(deltaTime);
     updateGravity(deltaTime);
     updateJump(deltaTime);
-    updateDoor();
     updateCamera();
+    updateDead();
+    updateDoor();
     updateTexture(deltaTime);
 }
 
@@ -66,6 +67,13 @@ void Platformer::Player::updateJump(const float deltaTime) {
 
 void Platformer::Player::updateCamera() {
     m_Camera.setCenter(sf::Vector2f(getPosition().x, m_Camera.getCenter().y));
+}
+
+void Platformer::Player::updateDead() {
+    if (getPosition().y > 144.f) {
+        m_CastleLevel.setPlayerDead();
+        m_CastleLevel.getCameraShaker().initializeShake();
+    }
 }
 
 void Platformer::Player::updateDoor() {
