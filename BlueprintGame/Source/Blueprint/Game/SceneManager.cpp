@@ -38,9 +38,10 @@ Blueprint::Game::SceneManager::~SceneManager() {
 }
 
 void Blueprint::Game::SceneManager::update() {
-    updateCurrentScene();
     loadScenes();
     unloadScenes();
+    reloadScenes();
+    updateCurrentScene();
     if (m_CurrentScene != nullptr) {
         m_CurrentScene->update(m_DeltaClock.restart());
     }
@@ -97,14 +98,12 @@ void Blueprint::Game::SceneManager::reloadScene(const std::filesystem::path& pat
     if (scene == nullptr) {
         throw SceneNotFoundException(path.string());
     }
-    unloadScene(path, *scene);
-    loadScene(path, *scene);
+    m_ReloadQueue.push_back({path, scene});
 }
 
 void Blueprint::Game::SceneManager::reloadScene(Scene& scene) {
     if (const std::filesystem::path path = find(scene); !path.empty()) {
-        unloadScene(path, scene);
-        loadScene(path, scene);
+        m_ReloadQueue.push_back({path, &scene});
     }
 }
 
@@ -210,7 +209,7 @@ void Blueprint::Game::SceneManager::saveData(const nlohmann::json& data, const s
     if (!file.is_open()) {
         throw Resources::FailedToOpenFileException(fullPath.string());
     }
-    if (!(file << data)) {
+    if (!(file << std::setw(4) << data)) {
         throw FailedToParseSceneDataException(fullPath.string());
     }
     file.close();
@@ -257,4 +256,39 @@ void Blueprint::Game::SceneManager::unloadScene(const std::filesystem::path& pat
     data["Type"] = getSceneType(path);
     scene.save(data);
     saveData(data, path);
+}
+
+void Blueprint::Game::SceneManager::reloadScenes() {
+    for (auto& [path, scene] : m_ReloadQueue) {
+        reloadScene(path, scene);
+    }
+    m_ReloadQueue.clear();
+}
+
+void Blueprint::Game::SceneManager::reloadScene(const std::filesystem::path& path, Scene* scene) {
+    enum Update {
+        CurrentScene,
+        NextCurrentScene,
+        Dont
+    };
+    Update update = Dont;
+    if (m_CurrentScene == scene) {
+        update = CurrentScene;
+    } else if (m_NextCurrentScene == scene) {
+        update = NextCurrentScene;
+    }
+    unloadScene(path, *scene);
+    delete scene;
+    scene = m_Fabric.createScene(getSceneType(path));
+    scene->load(loadData(path));
+    for (auto& [otherPath, otherScene] : m_Scenes) {
+        if (otherPath == path) {
+            otherScene = scene;
+        }
+    }
+    if (update == CurrentScene) {
+        m_CurrentScene = scene;
+    } else if (update == NextCurrentScene) {
+        m_NextCurrentScene = scene;
+    }
 }
