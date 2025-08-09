@@ -87,7 +87,7 @@ void Platformer::CastleLevel::save(nlohmann::ordered_json& data) {
 }
 
 void Platformer::CastleLevel::update() {
-    SceneEditor::update();
+    Level::update();
     updateViewLimit();
     if (const Blueprint::Editor::Palette::Item* selectedItem = m_Palette.getSelectedItem();
         selectedItem != m_LastItem) {
@@ -129,6 +129,19 @@ void Platformer::CastleLevel::updateItemPreview() {
     m_ItemPreview.setPosition(getMouseTilePosition());
 }
 
+Platformer::TilesHolder::Tile* Platformer::CastleLevel::createTile() {
+    if (m_LastItem->name == "Back Ground") {
+        return &m_BackGroundHolder.addTile(m_DragStart, m_DragStart);
+    }
+    if (m_LastItem->name == "Ground") {
+        return &m_GroundHolder.addTile(m_DragStart, m_DragStart);
+    }
+    if (m_LastItem->name == "Block") {
+        return &m_BlocksHolder.addTile(m_DragStart, m_DragStart);
+    }
+    return nullptr;
+}
+
 void Platformer::CastleLevel::updateAdd() {
     if (m_LastItem == nullptr) {
         return;
@@ -136,13 +149,8 @@ void Platformer::CastleLevel::updateAdd() {
     const sf::Vector2f mouseTilePosition = getMouseTilePosition();
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
         if (m_Tile == nullptr && isMouseInsideScreen()) {
-            if (m_LastItem->name == "Back Ground") {
-                m_Tile = &m_BackGroundHolder.addTile(m_DragStart, m_DragStart);
-            } else if (m_LastItem->name == "Ground") {
-                m_Tile = &m_GroundHolder.addTile(m_DragStart, m_DragStart);
-            } else if (m_LastItem->name == "Block") {
-                m_Tile = &m_BlocksHolder.addTile(m_DragStart, m_DragStart);
-            } else {
+            m_Tile = createTile();
+            if (m_Tile == nullptr) {
                 return;
             }
             m_DragStart = mouseTilePosition;
@@ -220,7 +228,7 @@ void Platformer::CastleLevel::updateStopCameraTrigger() {
 }
 
 void Platformer::CastleLevel::render(sf::RenderTarget& renderTarget) {
-    SceneEditor::render(renderTarget);
+    Level::render(renderTarget);
     renderTarget.clear(m_BackgroundColor);
     m_BackGroundHolder.render(renderTarget);
     m_GroundHolder.render(renderTarget);

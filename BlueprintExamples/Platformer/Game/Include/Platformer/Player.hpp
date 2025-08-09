@@ -2,6 +2,7 @@
 #define PLATFORMER_GAME_PLAYER_HPP
 
 #include "Platformer/PhysicObject.hpp"
+#include "SFML/Window/Keyboard.hpp"
 
 namespace Platformer {
 class CastleLevel;
@@ -32,17 +33,24 @@ private:
     void updateTexture(float deltaTime);
 
 private:
-    CastleLevel&                          m_CastleLevel;
-    Camera&                               m_Camera;
+    CastleLevel& m_CastleLevel;
+    Camera&      m_Camera;
+
     Blueprint::Resources::TextureResource m_IdleResource;
     Blueprint::Resources::TextureResource m_WalkResource;
     Blueprint::Resources::TextureResource m_JumpResource;
-    const sf::Vector2f                    m_Origin;
-    const float                           m_HorizontalSpeed;
-    const float                           m_JumpForce;
-    float                                 m_WalkFrame;
-    float                                 m_WalkTime;
-    const float                           m_WalkSwitchTime;
+
+    const sf::Keyboard::Key m_JumpKey;
+    const sf::Keyboard::Key m_LeftKey;
+    const sf::Keyboard::Key m_RightKey;
+    const sf::Keyboard::Key m_OpenKey;
+
+    const sf::Vector2f m_Origin;
+    const float        m_HorizontalSpeed;
+    const float        m_JumpForce;
+    float              m_WalkFrame;
+    float              m_WalkTime;
+    const float        m_WalkSwitchTime;
 };
 } // Platformer
 

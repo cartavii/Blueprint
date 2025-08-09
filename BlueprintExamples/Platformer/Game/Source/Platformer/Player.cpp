@@ -11,6 +11,10 @@ Platformer::Player::Player(CastleLevel& castleLevel)
 : PhysicObject(castleLevel.getGround(), castleLevel.getBlocks(), {16.f, 16.f}, {{-5.f, 4.f}, {10.f, 12.f}})
 , m_CastleLevel(castleLevel)
 , m_Camera(m_CastleLevel.getCamera())
+, m_JumpKey(sf::Keyboard::Key::Space)
+, m_LeftKey(sf::Keyboard::Key::Left)
+, m_RightKey(sf::Keyboard::Key::Right)
+, m_OpenKey(sf::Keyboard::Key::Up)
 , m_Origin(sf::Vector2f(8.f, 0.f))
 , m_HorizontalSpeed(2.f)
 , m_JumpForce(4.5f)
@@ -46,10 +50,10 @@ void Platformer::Player::loadTextures() {
 
 void Platformer::Player::updateWalking(const float deltaTime) {
     float direction = 0.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+    if (sf::Keyboard::isKeyPressed(m_LeftKey)) {
         direction--;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+    if (sf::Keyboard::isKeyPressed(m_RightKey)) {
         direction++;
     }
     setVelocityX(m_HorizontalSpeed * direction);
@@ -57,7 +61,7 @@ void Platformer::Player::updateWalking(const float deltaTime) {
 }
 
 void Platformer::Player::updateJump(const float deltaTime) {
-    if (!isGrounded() || !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+    if (!isGrounded() || !sf::Keyboard::isKeyPressed(m_JumpKey)) {
         return;
     }
     setGrounded(false);
@@ -80,7 +84,10 @@ void Platformer::Player::updateDoor() {
     if (!isGrounded()) {
         return;
     }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+    if (!sf::Keyboard::isKeyPressed(m_OpenKey)) {
+        return;
+    }
+    if (getVelocity().x != 0.f) {
         return;
     }
     if (const sf::FloatRect globalBounds = getGlobalBounds();

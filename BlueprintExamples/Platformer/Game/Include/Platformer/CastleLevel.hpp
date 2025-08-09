@@ -13,7 +13,7 @@
 #include <optional>
 
 namespace Platformer {
-class CastleLevel final : public Blueprint::Game::Scene {
+class CastleLevel : public Blueprint::Game::Scene {
 public:
     explicit CastleLevel(Blueprint::Game::SceneManager& manager);
 
@@ -46,6 +46,10 @@ public:
 
     [[nodiscard]] const TilesHolder& getBlocks() const;
 
+    [[nodiscard]] Player& getPlayer() { return m_Player; }
+
+    [[nodiscard]] bool isPlayerDead() { return m_PlayerDead != std::nullopt; }
+
     [[nodiscard]] Door& getDoor();
 
     [[nodiscard]] const Door& getDoor() const;
@@ -62,7 +66,7 @@ private:
 
     void loadNextSceneData(const nlohmann::ordered_json& data);
 
-private:
+protected:
     Camera                    m_Camera;
     TilesHolder               m_BackGround;
     TilesHolder               m_Ground;

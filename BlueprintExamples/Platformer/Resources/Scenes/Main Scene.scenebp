@@ -1,5 +1,5 @@
 {
-    "Type": "Platformer::CastleLevel",
+    "Type": "Platformer::FirstLevel",
     "BackGroundTiles": [
         {
             "TopLeft": {
@@ -248,5 +248,17 @@
             "Y": 96.0
         }
     },
-    "StopCamera": 336.0
+    "StopCamera": 336.0,
+    "Movement": {
+        "Position": {
+            "X": 96.0,
+            "Y": 64.0
+        }
+    },
+    "Open": {
+        "Position": {
+            "X": 256.0,
+            "Y": 64.0
+        }
+    }
 }
